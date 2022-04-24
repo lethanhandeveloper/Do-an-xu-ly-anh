@@ -31,11 +31,4 @@ def mediumBlur(main, value):
     main.new_image = cv2.boxFilter(main.new_image, (value, value))
     main.updateImage()
 
-def threshsold(main, value):
-    main.new_image = main.image
-    # if value == 0:
-    #     value = 1;
-    # if value % 2 == 0:
-    #     value += 1
-    main.new_image = cv2.threshold(main.new_image, value, 255, cv2.THRESH_BINARY)
-    main.updateImage()
+# def threshsold(main, value):

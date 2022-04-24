@@ -6,26 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1535</width>
-    <height>902</height>
+    <width>1491</width>
+    <height>887</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color:#535353
-
-</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="lbl_photo">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>80</y>
+      <y>50</y>
       <width>451</width>
-      <height>701</height>
+      <height>731</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -44,10 +42,10 @@ background-color:white
    <widget class="QLabel" name="lbl_newPhoto">
     <property name="geometry">
      <rect>
-      <x>570</x>
-      <y>80</y>
+      <x>560</x>
+      <y>50</y>
       <width>471</width>
-      <height>701</height>
+      <height>731</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -63,34 +61,13 @@ background-color:white
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="btn_openFIle">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>10</y>
-      <width>51</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color:white
-</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>images/open.png</normaloff>images/open.png</iconset>
-    </property>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>60</y>
+      <y>10</y>
       <width>501</width>
-      <height>751</height>
+      <height>791</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -104,9 +81,9 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>540</x>
-      <y>60</y>
+      <y>10</y>
       <width>521</width>
-      <height>741</height>
+      <height>791</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -116,12 +93,12 @@ background-color:white
      <string/>
     </property>
    </widget>
-   <widget class="QSlider" name="horizontalSlider">
+   <widget class="QSlider" name="slider_brighness">
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>470</y>
-      <width>331</width>
+      <y>440</y>
+      <width>321</width>
       <height>22</height>
      </rect>
     </property>
@@ -133,7 +110,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>440</y>
+      <y>410</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -150,7 +127,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>360</y>
+      <y>340</y>
       <width>91</width>
       <height>16</height>
      </rect>
@@ -163,11 +140,11 @@ background-color:white
      <string>Blur</string>
     </property>
    </widget>
-   <widget class="QSlider" name="horizontalSlider_2">
+   <widget class="QSlider" name="slider_blur">
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>400</y>
+      <y>370</y>
       <width>321</width>
       <height>22</height>
      </rect>
@@ -176,11 +153,11 @@ background-color:white
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox">
+   <widget class="QCheckBox" name="checkBox_grayImage">
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>280</y>
+      <y>220</y>
       <width>111</width>
       <height>20</height>
      </rect>
@@ -203,9 +180,9 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1110</x>
-      <y>60</y>
-      <width>401</width>
-      <height>171</height>
+      <y>20</y>
+      <width>331</width>
+      <height>181</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="histogramWidget"/>
@@ -214,7 +191,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1180</x>
-      <y>350</y>
+      <y>390</y>
       <width>261</width>
       <height>41</height>
      </rect>
@@ -226,47 +203,12 @@ background-color:white
     <property name="title">
      <string/>
     </property>
-    <widget class="QRadioButton" name="rd_btn_medium">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>10</y>
-       <width>95</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color:white</string>
-     </property>
-     <property name="text">
-      <string>Trung bình</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="rd_btn_gaussian">
-     <property name="geometry">
-      <rect>
-       <x>180</x>
-       <y>10</y>
-       <width>95</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color:white</string>
-     </property>
-     <property name="text">
-      <string>Gaussian</string>
-     </property>
-    </widget>
    </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>520</y>
+      <y>470</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -283,8 +225,8 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>550</y>
-      <width>331</width>
+      <y>500</y>
+      <width>321</width>
       <height>22</height>
      </rect>
     </property>
@@ -296,7 +238,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1360</x>
-      <y>280</y>
+      <y>220</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -315,33 +257,376 @@ background-color:white
      <string>Đảo ảnh</string>
     </property>
    </widget>
+   <widget class="QCheckBox" name="checkBox_edge_detection">
+    <property name="geometry">
+     <rect>
+      <x>1120</x>
+      <y>260</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:white
+
+</string>
+    </property>
+    <property name="text">
+     <string>Tách biên</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="cbb_edge_dectection">
+    <property name="geometry">
+     <rect>
+      <x>1270</x>
+      <y>250</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:white
+
+</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox_sharpen_image">
+    <property name="geometry">
+     <rect>
+      <x>1120</x>
+      <y>300</y>
+      <width>111</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:white
+
+</string>
+    </property>
+    <property name="text">
+     <string>Làm sắc nét</string>
+    </property>
+   </widget>
+   <widget class="QSlider" name="slider_imgscale">
+    <property name="geometry">
+     <rect>
+      <x>1120</x>
+      <y>560</y>
+      <width>311</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="pageStep">
+     <number>10</number>
+    </property>
+    <property name="value">
+     <number>0</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>1120</x>
+      <y>530</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:white
+</string>
+    </property>
+    <property name="text">
+     <string>Scale</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>-10</x>
+      <y>-30</y>
+      <width>1501</width>
+      <height>891</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:#535353
+
+</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>20</y>
+      <width>191</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Microsoft Sans Serif</family>
+      <pointsize>12</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:#FFF</string>
+    </property>
+    <property name="text">
+     <string>ORIGINAL</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_11">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>10</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>MS Sans Serif</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:#FFF</string>
+    </property>
+    <property name="text">
+     <string>CHANGE</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rd_btn_medium">
+    <property name="geometry">
+     <rect>
+      <x>1230</x>
+      <y>340</y>
+      <width>95</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:white</string>
+    </property>
+    <property name="text">
+     <string>Trung bình</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="rd_btn_gaussian">
+    <property name="geometry">
+     <rect>
+      <x>1350</x>
+      <y>340</y>
+      <width>95</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:white</string>
+    </property>
+    <property name="text">
+     <string>Gaussian</string>
+    </property>
+   </widget>
+   <zorder>label_7</zorder>
    <zorder>label_3</zorder>
    <zorder>label</zorder>
    <zorder>lbl_photo</zorder>
    <zorder>lbl_newPhoto</zorder>
-   <zorder>btn_openFIle</zorder>
-   <zorder>horizontalSlider</zorder>
+   <zorder>slider_brighness</zorder>
    <zorder>label_4</zorder>
    <zorder>label_2</zorder>
-   <zorder>horizontalSlider_2</zorder>
-   <zorder>checkBox</zorder>
+   <zorder>slider_blur</zorder>
+   <zorder>checkBox_grayImage</zorder>
    <zorder>verticalLayoutWidget</zorder>
    <zorder>groupBox</zorder>
    <zorder>label_5</zorder>
    <zorder>slider_threshold</zorder>
    <zorder>checkbox_invertImage</zorder>
+   <zorder>checkBox_edge_detection</zorder>
+   <zorder>cbb_edge_dectection</zorder>
+   <zorder>checkBox_sharpen_image</zorder>
+   <zorder>slider_imgscale</zorder>
+   <zorder>label_6</zorder>
+   <zorder>label_8</zorder>
+   <zorder>label_11</zorder>
+   <zorder>rd_btn_medium</zorder>
+   <zorder>rd_btn_gaussian</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1535</width>
+     <width>1491</width>
      <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionPrint"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuImage">
+    <property name="title">
+     <string>Image</string>
+    </property>
+    <addaction name="actionRotation"/>
+    <addaction name="actionShearing"/>
+    <addaction name="separator"/>
+    <addaction name="actionZoom_in"/>
+    <addaction name="actionZoom_out"/>
+   </widget>
+   <widget class="QMenu" name="menuEnhancement">
+    <property name="title">
+     <string>Enhancement</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuSmoothing">
+    <property name="title">
+     <string>Filter</string>
+    </property>
+    <widget class="QMenu" name="menuBlur">
+     <property name="title">
+      <string>Blur</string>
+     </property>
+     <addaction name="actionBox"/>
+     <addaction name="actionMedian"/>
+     <addaction name="actionGaussian"/>
+    </widget>
+    <addaction name="menuBlur"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuImage"/>
+   <addaction name="menuEnhancement"/>
+   <addaction name="menuSmoothing"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionPrint"/>
+   <addaction name="actionExit"/>
+   <addaction name="separator"/>
+  </widget>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Huyhoang/open.png</normaloff>../Huyhoang/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionOpen_2">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Huyhoang/open.png</normaloff>../Huyhoang/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Huyhoang/save.png</normaloff>../Huyhoang/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionPrint">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Huyhoang/print.png</normaloff>../Huyhoang/print.png</iconset>
+   </property>
+   <property name="text">
+    <string>Print</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="icon">
+    <iconset>
+     <normaloff>../Huyhoang/Quit.png</normaloff>../Huyhoang/Quit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionRotation">
+   <property name="text">
+    <string>Rotation</string>
+   </property>
+  </action>
+  <action name="actionShearing">
+   <property name="text">
+    <string>Shearing</string>
+   </property>
+  </action>
+  <action name="actionZoom_in">
+   <property name="text">
+    <string>Zoom in 10%</string>
+   </property>
+  </action>
+  <action name="actionZoom_out">
+   <property name="text">
+    <string>Zoom out 10%</string>
+   </property>
+  </action>
+  <action name="actionBox">
+   <property name="text">
+    <string>Box</string>
+   </property>
+  </action>
+  <action name="actionMedian">
+   <property name="text">
+    <string>Median</string>
+   </property>
+  </action>
+  <action name="actionGaussian">
+   <property name="text">
+    <string>Gaussian</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
