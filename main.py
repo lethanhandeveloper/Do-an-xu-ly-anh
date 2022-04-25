@@ -1,7 +1,7 @@
 import sys, cv2
 
 import numpy
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -29,10 +29,10 @@ class MainWindow:
         self.uic = Ui_MainWindow()
         self.uic.setupUi(self.main_win)
         self.uic.slider_brighness.valueChanged['int'].connect(self.changeBrightnessValue)
-        self.uic.slider_blur.valueChanged['int'].connect(self.blurEvt)
+        # self.uic.slider_blur.valueChanged['int'].connect(self.blurEvt)
         self.uic.slider_threshold.valueChanged['int'].connect(self.changeThretholdValue)
         self.uic.actionOpen.triggered.connect(self.openImageEvt)
-        self.uic.actionGaussian.triggered.connect(self.changeGaussianValue)
+        self.uic.actionGaussian.triggered.connect(self.openGaussianForm)
         # self.uic.cbb_edge_dectection.addItems(["Java", "C#", "Python"])
         self.uic.actionSave.triggered.connect(self.saveImageEvt)
         self.uic.actionRotation.triggered.connect(self.changeRotateValue)
@@ -185,10 +185,19 @@ class MainWindow:
         #     value += 1
         self.new_image = cv2.threshold(self.new_image, self.thresholdValue, 255, cv2.THRESH_BINARY)
         self.new_image = self.new_image[1]
-    def changeGaussianValue(self, value):
-        self.changeGaussianValue = value
-        ui_f = Ui_Form()
-        ui_f.show()
+    def openGaussianForm(self, value):
+        # self.changeGaussianValue = value
+
+        # self.editvalueWindow = MainWindow()
+        # self.ui = Ui_Form()
+        # self.ui.setupUi(self.editvalueWindow)
+        # self.editvalueWindow.show()
+        self.edt_window = QtWidgets.QMainWindow()
+
+        self.ui = Ui_Form()
+        self.ui.setupUi(self, self.edt_window , 'Gaussian filter')
+
+        self.edt_window.show()
     def changeblurMode(self, text):
         if(self.uic.rd_btn_medium.isChecked()):
             blur.mode = 0
@@ -224,26 +233,26 @@ class MainWindow:
         final_hsv = cv2.merge((h, s, v))
         self.new_image = cv2.cvtColor(final_hsv, cv2.COLOR_HSV2BGR)
         # print("H",h,"S :", s, "V:", v)
-    def blurEvt(self, value):
-        # self.new_image = self.image
-        # if value == 0:
-        #     value = 1
-        # if value % 2 == 0:
-        #     value+= 1
-        # kernel_size = (value, value)  # +1 is to avoid 0
-        # self.new_image = cv2.GaussianBlur(self.new_image, kernel_size, 0)
-        # self.showImage()
-    # def checkboxEvt(self, state):
-    #     if (QtCore.Qt.Checked == state):
-    #         self.new_image = self.image
-    #         self.new_image = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2GRAY)
-    #
-    #         self.showImage()
-    #     print(blur.mode)
-        if(blur.mode == 0):
-            blur.mediumBlur(self, value)
-        elif(blur.mode == 1):
-            blur.gaussianBlur(self, value)
+    # def gau(self, value):
+    #     # self.new_image = self.image
+    #     # if value == 0:
+    #     #     value = 1
+    #     # if value % 2 == 0:
+    #     #     value+= 1
+    #     # kernel_size = (value, value)  # +1 is to avoid 0
+    #     # self.new_image = cv2.GaussianBlur(self.new_image, kernel_size, 0)
+    #     # self.showImage()
+    # # def checkboxEvt(self, state):
+    # #     if (QtCore.Qt.Checked == state):
+    # #         self.new_image = self.image
+    # #         self.new_image = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2GRAY)
+    # #
+    # #         self.showImage()
+    # #     print(blur.mode)
+    #     if(blur.mode == 0):
+    #         blur.mediumBlur(self, value)
+    #     elif(blur.mode == 1):
+    #         blur.gaussianBlur(self, value)
 
     def saveImageEvt(self):
         f = QFileDialog.getSaveFileName(None, 'Save image', '',
@@ -281,7 +290,10 @@ class MainWindow:
             self.updateThrehold()
         if(self.rotateValue >= 0):
             image_module.rotateImage(self)
-
+        if(self.gaussianValue > 0):
+            if self.gaussianValue % 2 == 0:
+                self.gaussianValue += 1
+            self.new_image = cv2.GaussianBlur(self.new_image, (self.gaussianValue, self.gaussianValue), 0)
     # rows, cols, steps = self.new_image.shape
     # M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)  # thay đổi chiều của ảnh
     # self.new_image = cv2.warpAffine(self.new_image, M, (cols, rows))
