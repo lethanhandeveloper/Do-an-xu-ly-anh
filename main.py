@@ -23,7 +23,7 @@ class MainWindow:
     selectedImage = False
     rotateValue = 0
     gaussianValue = 0
-
+    isHistogram_Equal = False
     def __init__(self):
         self.main_win = QMainWindow()
         self.uic = Ui_MainWindow()
@@ -39,11 +39,12 @@ class MainWindow:
         self.uic.checkBox_grayImage.stateChanged.connect(self.grayImageEvt)
         self.uic.checkbox_invertImage.stateChanged.connect(self.invertImageEvt)
         self.uic.checkBox_sharpen_image.stateChanged.connect(self.sharpenImageEvt)
-        self.uic.rd_btn_medium.toggled.connect(self.changeblurMode)
-        self.uic.rd_btn_gaussian.toggled.connect(self.changeblurMode)
+        # self.uic.rd_btn_medium.toggled.connect(self.changeblurMode)
+        # self.uic.rd_btn_gaussian.toggled.connect(self.changeblurMode)
         self.uic.slider_imgscale.valueChanged['int'].connect(self.scaleImage)
         self.uic.checkBox_edge_detection.stateChanged.connect(self.checkBox_edgeDetectionEvt)
         # self.uic.checkBox.stateChanged.connect(self.checkboxEvt)
+        self.uic.actionHistogram_equal.triggered.connect(self.turnHistogramEqual)
         self.figure = plt.figure()
         self.canvas = FigureCanvas(self.figure)
         self.uic.histogramWidget.addWidget(self.canvas)
@@ -61,6 +62,15 @@ class MainWindow:
             self.rotateValue = 0
 
         self.showImage()
+    def turnHistogramEqual(self):
+        self.isHistogram_Equal = True
+
+        self.showImage()
+    def histogramEqual(self):
+        img_yuv = cv2.cvtColor(self.new_image, cv2.COLOR_RGB2YUV)
+        img_yuv[:, :, 0] = cv2.equalizeHist(img_yuv[:, :, 0])
+        self.new_image = cv2.cvtColor(img_yuv, cv2.COLOR_YUV2RGB)
+
 
     def scaleImage(self, value):
         self.new_image = cv2.resize(self.new_image, None, fx=value+1, fy=value+1, interpolation=cv2.INTER_CUBIC)
@@ -294,6 +304,8 @@ class MainWindow:
             if self.gaussianValue % 2 == 0:
                 self.gaussianValue += 1
             self.new_image = cv2.GaussianBlur(self.new_image, (self.gaussianValue, self.gaussianValue), 0)
+        if(self.isHistogram_Equal == True):
+            self.histogramEqual()
     # rows, cols, steps = self.new_image.shape
     # M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)  # thay đổi chiều của ảnh
     # self.new_image = cv2.warpAffine(self.new_image, M, (cols, rows))

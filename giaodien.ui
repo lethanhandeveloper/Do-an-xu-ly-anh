@@ -97,7 +97,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>440</y>
+      <y>360</y>
       <width>321</width>
       <height>22</height>
      </rect>
@@ -110,7 +110,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>410</y>
+      <y>340</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -121,36 +121,6 @@ background-color:white
     </property>
     <property name="text">
      <string>Brighness</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>1120</x>
-      <y>340</y>
-      <width>91</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color:white
-</string>
-    </property>
-    <property name="text">
-     <string>Blur</string>
-    </property>
-   </widget>
-   <widget class="QSlider" name="slider_blur">
-    <property name="geometry">
-     <rect>
-      <x>1120</x>
-      <y>370</y>
-      <width>321</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
    <widget class="QCheckBox" name="checkBox_grayImage">
@@ -208,7 +178,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>470</y>
+      <y>400</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -225,7 +195,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>500</y>
+      <y>420</y>
       <width>321</width>
       <height>22</height>
      </rect>
@@ -322,7 +292,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>560</y>
+      <y>480</y>
       <width>311</width>
       <height>22</height>
      </rect>
@@ -341,7 +311,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>530</y>
+      <y>460</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -418,41 +388,6 @@ background-color:white
      <string>CHANGE</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="rd_btn_medium">
-    <property name="geometry">
-     <rect>
-      <x>1230</x>
-      <y>340</y>
-      <width>95</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color:white</string>
-    </property>
-    <property name="text">
-     <string>Trung bình</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="rd_btn_gaussian">
-    <property name="geometry">
-     <rect>
-      <x>1350</x>
-      <y>340</y>
-      <width>95</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color:white</string>
-    </property>
-    <property name="text">
-     <string>Gaussian</string>
-    </property>
-   </widget>
    <zorder>label_7</zorder>
    <zorder>label_3</zorder>
    <zorder>label</zorder>
@@ -460,8 +395,6 @@ background-color:white
    <zorder>lbl_newPhoto</zorder>
    <zorder>slider_brighness</zorder>
    <zorder>label_4</zorder>
-   <zorder>label_2</zorder>
-   <zorder>slider_blur</zorder>
    <zorder>checkBox_grayImage</zorder>
    <zorder>verticalLayoutWidget</zorder>
    <zorder>groupBox</zorder>
@@ -475,8 +408,6 @@ background-color:white
    <zorder>label_6</zorder>
    <zorder>label_8</zorder>
    <zorder>label_11</zorder>
-   <zorder>rd_btn_medium</zorder>
-   <zorder>rd_btn_gaussian</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -511,6 +442,7 @@ background-color:white
     <property name="title">
      <string>Enhancement</string>
     </property>
+    <addaction name="actionHistogram_equal"/>
    </widget>
    <widget class="QMenu" name="menuSmoothing">
     <property name="title">
@@ -625,6 +557,11 @@ background-color:white
   <action name="actionGaussian">
    <property name="text">
     <string>Gaussian</string>
+   </property>
+  </action>
+  <action name="actionHistogram_equal">
+   <property name="text">
+    <string>Histogram equal</string>
    </property>
   </action>
  </widget>

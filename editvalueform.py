@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 class Ui_Form(object):
     title = ''
-    spinBox = None
+    # spinBox = None
     def setupUi(self, main, Form, title):
         self.title = title
         self.main = main
@@ -57,6 +57,7 @@ class Ui_Form(object):
         self.btn_cancel.setText(_translate("Form", "Cancel"))
         self.label.setText(_translate("Form", "Size"))
     def changeValue(self, value):
+        print(self.spinBox)
         self.main.gaussianValue = value
         self.spinBox.setProperty('value', self.main.gaussianValue)
 
@@ -66,4 +67,4 @@ class Ui_Form(object):
     def cancelBtnEvt(self):
         self.main.gaussianValue = self.tmp_gaussianValue
         self.main.showImage()
-        self.Form.terminal()
+        self.Form.close()
