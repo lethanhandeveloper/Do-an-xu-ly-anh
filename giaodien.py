@@ -221,6 +221,7 @@ class Ui_MainWindow(object):
         self.actionShearing.setObjectName("actionShearing")
         self.actionZoom_in = QtWidgets.QAction(MainWindow)
         self.actionZoom_in.setObjectName("actionZoom_in")
+
         self.actionZoom_out = QtWidgets.QAction(MainWindow)
         self.actionZoom_out.setObjectName("actionZoom_out")
         self.actionBox = QtWidgets.QAction(MainWindow)

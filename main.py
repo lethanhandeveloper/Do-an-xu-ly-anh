@@ -1,15 +1,15 @@
 import sys, cv2
 
-import numpy
 from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
-from numpy import random
 import numpy as np
-from scipy import ndimage
 
-import blur, image_module
+import blur
+from modules import image_module
+from modules import filter_module
 from editvalueform import Ui_Form
 
 from giaodien import Ui_MainWindow
@@ -22,8 +22,14 @@ class MainWindow:
     thresholdValue = 0;
     selectedImage = False
     rotateValue = 0
-    gaussianValue = 0
     isHistogram_Equal = False
+    isGray = False
+    isInvert = False
+    #Image
+    isShearing = False
+    #Blur
+    gaussianValue = 0
+
     def __init__(self):
         self.main_win = QMainWindow()
         self.uic = Ui_MainWindow()
@@ -32,7 +38,7 @@ class MainWindow:
         # self.uic.slider_blur.valueChanged['int'].connect(self.blurEvt)
         self.uic.slider_threshold.valueChanged['int'].connect(self.changeThretholdValue)
         self.uic.actionOpen.triggered.connect(self.openImageEvt)
-        self.uic.actionGaussian.triggered.connect(self.openGaussianForm)
+        self.uic.actionGaussian.triggered.connect(self.gaussianFormEvt)
         # self.uic.cbb_edge_dectection.addItems(["Java", "C#", "Python"])
         self.uic.actionSave.triggered.connect(self.saveImageEvt)
         self.uic.actionRotation.triggered.connect(self.changeRotateValue)
@@ -49,8 +55,33 @@ class MainWindow:
         self.canvas = FigureCanvas(self.figure)
         self.uic.histogramWidget.addWidget(self.canvas)
 
+        self.uic.actionShearing.triggered.connect(self.turnShearing)
+        #zoom
+        self.uic.actionZoom_in.triggered.connect(self.changeValueZoom)
         self.new_image = None
         self.tmp_image = None
+    def turnShearing(self):
+        print(self.isShearing)
+        if(self.isShearing == True):
+            self.isShearing = False
+        else:
+            self.isShearing = True
+
+        self.showImage()
+    def gaussianFormEvt(self):
+        self.openEditValueForm(1)
+
+    def openEditValueForm(self, type):
+        self.edt_window = QtWidgets.QMainWindow()
+
+        self.ui = Ui_Form(self, type)
+        self.ui.setupUi(self.edt_window)
+
+        self.edt_window.show()
+    def changeValueZoom(self):
+        image_module.zoomValue += 0.1
+
+        self.showImage()
     def changeRotateValue(self):
         if(self.rotateValue == 0):
             self.rotateValue = 90
@@ -177,12 +208,18 @@ class MainWindow:
         # cv2.imshow('dddd', self.new_image)
         self.showImage()
     def grayImageEvt(self):
-        self.new_image = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2GRAY)
-        cv2.imshow('ssdsds', self.new_image)
+        if self.isGray == True :
+            self.isGray = False
+        else:
+            self.isGray = True
+
         self.showImage()
     def invertImageEvt(self):
-        self.new_image = self.image
-        self.new_image  = 255 - self.new_image
+        if self.isInvert == True:
+            self.isInvert = False
+        else:
+            self.isInvert = True
+
         self.showImage()
     def changeThretholdValue(self, value):
         self.thresholdValue = value
@@ -195,19 +232,7 @@ class MainWindow:
         #     value += 1
         self.new_image = cv2.threshold(self.new_image, self.thresholdValue, 255, cv2.THRESH_BINARY)
         self.new_image = self.new_image[1]
-    def openGaussianForm(self, value):
-        # self.changeGaussianValue = value
 
-        # self.editvalueWindow = MainWindow()
-        # self.ui = Ui_Form()
-        # self.ui.setupUi(self.editvalueWindow)
-        # self.editvalueWindow.show()
-        self.edt_window = QtWidgets.QMainWindow()
-
-        self.ui = Ui_Form()
-        self.ui.setupUi(self, self.edt_window , 'Gaussian filter')
-
-        self.edt_window.show()
     def changeblurMode(self, text):
         if(self.uic.rd_btn_medium.isChecked()):
             blur.mode = 0
@@ -219,7 +244,6 @@ class MainWindow:
         if(len(image.shape) == 2):
             h, w = self.new_image.shape
             bytesPerLine = 3 * w
-            cv2.imshow('sssss', self.new_image)
             image = QtGui.QImage(image.data, w, h, bytesPerLine, QtGui.QImage.Format_Grayscale8).rgbSwapped()
         else:
             h, w, c = image.shape
@@ -274,7 +298,8 @@ class MainWindow:
         f = QFileDialog.getOpenFileName(None, 'Open a file', '',
                                            'Image Files (*.png *.jpg *.bmp *.tif)')
         if f[0] != '':
-            self.image = cv2.imread(f[0], cv2.COLOR_HSV2BGR)
+            self.image = cv2.imread(f[0])
+
             print('so chieu', len(self.image.shape))
             print('imageeeeeeeee', self.image)
             self.new_image =  self.image
@@ -288,7 +313,20 @@ class MainWindow:
         self.updateChange()
 
         self.uic.lbl_photo.setPixmap(QtGui.QPixmap.fromImage(self.convertImagetoDisplay(self.image)))
-        self.uic.lbl_newPhoto.setPixmap(QtGui.QPixmap.fromImage(self.convertImagetoDisplay(self.new_image)))
+        # self.uic.lbl_newPhoto.setPixmap(QtGui.QPixmap.fromImage(self.convertImagetoDisplay(self.new_image)))
+
+        qformat = QImage.Format_Indexed8
+        if len(self.new_image.shape) == 3:
+            if(self.new_image.shape[2]) == 4:
+                qformat = QImage.Format_RGBA8888
+            else:
+                qformat = QImage.Format_RGB888
+        new_image = QImage(self.new_image, self.new_image.shape[1], self.new_image.shape[0], self.new_image.strides[0], qformat)
+
+        new_image = new_image.rgbSwapped()
+
+        self.uic.lbl_newPhoto.setPixmap(QPixmap.fromImage(new_image))
+        self.uic.lbl_newPhoto.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
         self.updateHistogram()
     def updateChange(self):
         self.new_image = self.image
@@ -301,16 +339,22 @@ class MainWindow:
         if(self.rotateValue >= 0):
             image_module.rotateImage(self)
         if(self.gaussianValue > 0):
+            new_value = self.gaussianValue
             if self.gaussianValue % 2 == 0:
-                self.gaussianValue += 1
-            self.new_image = cv2.GaussianBlur(self.new_image, (self.gaussianValue, self.gaussianValue), 0)
+                new_value = self.gaussianValue + 1
+            self.new_image = cv2.GaussianBlur(self.new_image, (new_value, new_value), 0)
+        if(image_module.zoomValue >= 1):
+            self.image = cv2.resize(np.uint8(self.image), None, fx=30, fy=30, interpolation=cv2.INTER_CUBIC)
+            print(image_module.zoomValue)
+
         if(self.isHistogram_Equal == True):
             self.histogramEqual()
-    # rows, cols, steps = self.new_image.shape
-    # M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)  # thay đổi chiều của ảnh
-    # self.new_image = cv2.warpAffine(self.new_image, M, (cols, rows))
-    #
-    # self.showImage()
+        if(self.isGray == True):
+            self.new_image = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2GRAY)
+        if(self.isInvert == True):
+            self.new_image = 255 - self.new_image
+        if(self.isShearing == True):
+            self.new_image = image_module.shearingImage(self.new_image)
     def updateHistogram(self):
         # random data
         # data = [random.random() for i in range(10)]
@@ -319,7 +363,7 @@ class MainWindow:
         chanel = len(self.new_image.shape)
         if(chanel == 2):
             ax = self.figure.add_subplot(111)
-            histr = cv2.calcHist([self.new_image], 0, None, [256], [0, 256])
+            histr = cv2.calcHist([self.new_image], [0], None, [256], [0, 256])
             ax.plot(histr, color='yellow', linewidth=3.0)
             ax.set_ylabel('Y', color='blue')
             ax.set_xlabel('X', color='blue')
@@ -344,7 +388,6 @@ class MainWindow:
         # ax.plot(data, '*-')
 
         # refresh canvas
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     main_win = MainWindow()
