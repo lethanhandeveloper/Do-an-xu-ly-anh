@@ -2,6 +2,7 @@ import sys, cv2
 
 import numpy
 from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -13,17 +14,29 @@ import blur, image_module
 from editvalueform import Ui_Form
 
 from giaodien import Ui_MainWindow
-
+from modules import filter_module
 class MainWindow:
     image = None
     new_image = None
 
-    brightValue = 0;
+
     thresholdValue = 0;
     selectedImage = False
     rotateValue = 0
-    gaussianValue = 0
+
     isHistogram_Equal = False
+
+    isGray = False
+    isInvert = False
+
+    #blur
+    gaussianBlurValue = 0
+    boxBlurValue = 0
+    medianBlurValue = 0
+    #image
+    brightValue = 0
+    c = gamma = 1
+    isNoise = False
     def __init__(self):
         self.main_win = QMainWindow()
         self.uic = Ui_MainWindow()
@@ -38,19 +51,59 @@ class MainWindow:
         self.uic.actionRotation.triggered.connect(self.changeRotateValue)
         self.uic.checkBox_grayImage.stateChanged.connect(self.grayImageEvt)
         self.uic.checkbox_invertImage.stateChanged.connect(self.invertImageEvt)
-        self.uic.checkBox_sharpen_image.stateChanged.connect(self.sharpenImageEvt)
+        self.uic.actionAdd_Noise.triggered.connect(self.actionNoiseEvt)
         # self.uic.rd_btn_medium.toggled.connect(self.changeblurMode)
         # self.uic.rd_btn_gaussian.toggled.connect(self.changeblurMode)
         self.uic.slider_imgscale.valueChanged['int'].connect(self.scaleImage)
-        self.uic.checkBox_edge_detection.stateChanged.connect(self.checkBox_edgeDetectionEvt)
         # self.uic.checkBox.stateChanged.connect(self.checkboxEvt)
         self.uic.actionHistogram_equal.triggered.connect(self.turnHistogramEqual)
         self.figure = plt.figure()
         self.canvas = FigureCanvas(self.figure)
         self.uic.histogramWidget.addWidget(self.canvas)
-
+        self.uic.actionBox.triggered.connect(self.openBoxFilterForm)
+        self.uic.actionLog.triggered.connect(self.turnLogarit)
+        self.uic.actionMedian.triggered.connect(self.openMedianFilterForm)
+        self.uic.btn_reset.clicked.connect(self.reset)
         self.new_image = None
         self.tmp_image = None
+    def reset(self):
+        self.initial_variable()
+
+        self.showImage()
+    def initial_variable(self):
+        self.thresholdValue = 0;
+        self.selectedImage = False
+        self.rotateValue = 0
+
+        self.isHistogram_Equal = False
+
+        self.isGray = False
+        self.isInvert = False
+
+        # blur
+        self.gaussianBlurValue = 0
+        self.boxBlurValue = 0
+        self.medianBlurValue = 0
+        # image
+        self.brightValue = 0
+        self.c = self.gamma = 1
+        self.isNoise = False
+    def openMedianFilterForm(self):
+        self.openEdtForm(3)
+    def openBoxFilterForm(self):
+        self.openEdtForm(2)
+
+    def turnLogarit(self):
+        self.openEdtForm(10)
+
+        self.showImage()
+    def actionNoiseEvt(self):
+        if(self.isNoise == True):
+            self.isNoise = False
+        else:
+            self.isNoise= True
+
+        self.showImage()
     def changeRotateValue(self):
         if(self.rotateValue == 0):
             self.rotateValue = 90
@@ -177,12 +230,16 @@ class MainWindow:
         # cv2.imshow('dddd', self.new_image)
         self.showImage()
     def grayImageEvt(self):
-        self.new_image = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2GRAY)
-        cv2.imshow('ssdsds', self.new_image)
+        if(self.isGray == True):
+            self.isGray = False
+        else:
+            self.isGray = True
         self.showImage()
     def invertImageEvt(self):
-        self.new_image = self.image
-        self.new_image  = 255 - self.new_image
+        if(self.isInvert == True):
+            self.isInvert = False
+        else:
+            self.isInvert = True
         self.showImage()
     def changeThretholdValue(self, value):
         self.thresholdValue = value
@@ -195,17 +252,20 @@ class MainWindow:
         #     value += 1
         self.new_image = cv2.threshold(self.new_image, self.thresholdValue, 255, cv2.THRESH_BINARY)
         self.new_image = self.new_image[1]
-    def openGaussianForm(self, value):
-        # self.changeGaussianValue = value
+    def openGaussianForm(self):
+        # self.changegaussianBlurValue = value
 
         # self.editvalueWindow = MainWindow()
         # self.ui = Ui_Form()
         # self.ui.setupUi(self.editvalueWindow)
         # self.editvalueWindow.show()
+
+        self.openEdtForm(1)
+    def openEdtForm(self, type):
         self.edt_window = QtWidgets.QMainWindow()
 
-        self.ui = Ui_Form()
-        self.ui.setupUi(self, self.edt_window , 'Gaussian filter')
+        self.ui = Ui_Form(self, type)
+        self.ui.setupUi(self.edt_window)
 
         self.edt_window.show()
     def changeblurMode(self, text):
@@ -274,7 +334,7 @@ class MainWindow:
         f = QFileDialog.getOpenFileName(None, 'Open a file', '',
                                            'Image Files (*.png *.jpg *.bmp *.tif)')
         if f[0] != '':
-            self.image = cv2.imread(f[0], cv2.COLOR_HSV2BGR)
+            self.image = cv2.imread(f[0])
             print('so chieu', len(self.image.shape))
             print('imageeeeeeeee', self.image)
             self.new_image =  self.image
@@ -283,12 +343,26 @@ class MainWindow:
             self.uic.slider_brighness.setValue(self.brightValue)
 
             self.selectedImage = True
+            self.initial_variable()
+
             self.showImage()
     def showImage(self):
         self.updateChange()
 
         self.uic.lbl_photo.setPixmap(QtGui.QPixmap.fromImage(self.convertImagetoDisplay(self.image)))
-        self.uic.lbl_newPhoto.setPixmap(QtGui.QPixmap.fromImage(self.convertImagetoDisplay(self.new_image)))
+
+        qformat = QImage.Format_Indexed8
+
+        if len(self.new_image.shape) == 3:
+            if (self.new_image.shape[2]) == 4:
+                qformat = QImage.Format_RGBA8888
+            else:
+                qformat = QImage.Format_RGB888
+        img = QImage(self.new_image, self.new_image.shape[1], self.new_image.shape[0], self.new_image.strides[0], qformat).rgbSwapped()
+
+        self.uic.lbl_newPhoto.setPixmap(QPixmap.fromImage(img))
+        self.uic.lbl_newPhoto.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
         self.updateHistogram()
     def updateChange(self):
         self.new_image = self.image
@@ -300,12 +374,24 @@ class MainWindow:
             self.updateThrehold()
         if(self.rotateValue >= 0):
             image_module.rotateImage(self)
-        if(self.gaussianValue > 0):
-            if self.gaussianValue % 2 == 0:
-                self.gaussianValue += 1
-            self.new_image = cv2.GaussianBlur(self.new_image, (self.gaussianValue, self.gaussianValue), 0)
+        #gaussian blur
+
+        self.new_image = filter_module.gaussian_blur(self.new_image, self.gaussianBlurValue)
+        #box blur
+        self.new_image = filter_module.box_blur(self.new_image, self.boxBlurValue)
+        #median blur
+        self.new_image = filter_module.median_blur(self.new_image, self.medianBlurValue)
         if(self.isHistogram_Equal == True):
             self.histogramEqual()
+        if(self.isGray == True):
+            self.new_image = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2GRAY)
+        if(self.isInvert == True):
+            self.new_image = 255 - self.new_image
+        if(self.isNoise == True):
+            self.new_image = filter_module.add_noise(self.new_image)
+            self.isNoise = False
+        if(self.c > 1 or self.gamma > 1):
+            self.new_image = float(self.c) * cv2.log(self.gamma + self.new_image)
     # rows, cols, steps = self.new_image.shape
     # M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)  # thay đổi chiều của ảnh
     # self.new_image = cv2.warpAffine(self.new_image, M, (cols, rows))
@@ -319,7 +405,7 @@ class MainWindow:
         chanel = len(self.new_image.shape)
         if(chanel == 2):
             ax = self.figure.add_subplot(111)
-            histr = cv2.calcHist([self.new_image], 0, None, [256], [0, 256])
+            histr = cv2.calcHist([self.new_image], [0], None, [256], [0, 256])
             ax.plot(histr, color='yellow', linewidth=3.0)
             ax.set_ylabel('Y', color='blue')
             ax.set_xlabel('X', color='blue')

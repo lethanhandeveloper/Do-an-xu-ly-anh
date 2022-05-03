@@ -97,7 +97,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>360</y>
+      <y>280</y>
       <width>321</width>
       <height>22</height>
      </rect>
@@ -110,7 +110,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>340</y>
+      <y>250</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -178,7 +178,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>400</y>
+      <y>310</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -195,7 +195,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>420</y>
+      <y>340</y>
       <width>321</width>
       <height>22</height>
      </rect>
@@ -227,73 +227,12 @@ background-color:white
      <string>Đảo ảnh</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_edge_detection">
-    <property name="geometry">
-     <rect>
-      <x>1120</x>
-      <y>260</y>
-      <width>111</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color:white
-
-</string>
-    </property>
-    <property name="text">
-     <string>Tách biên</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="cbb_edge_dectection">
-    <property name="geometry">
-     <rect>
-      <x>1270</x>
-      <y>250</y>
-      <width>171</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color:white
-
-</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_sharpen_image">
-    <property name="geometry">
-     <rect>
-      <x>1120</x>
-      <y>300</y>
-      <width>111</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color:white
-
-</string>
-    </property>
-    <property name="text">
-     <string>Làm sắc nét</string>
-    </property>
-   </widget>
    <widget class="QSlider" name="slider_imgscale">
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>480</y>
-      <width>311</width>
+      <y>400</y>
+      <width>321</width>
       <height>22</height>
      </rect>
     </property>
@@ -311,7 +250,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>460</y>
+      <y>370</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -388,6 +327,27 @@ background-color:white
      <string>CHANGE</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="btn_reset">
+    <property name="geometry">
+     <rect>
+      <x>1120</x>
+      <y>747</y>
+      <width>341</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:white
+</string>
+    </property>
+    <property name="text">
+     <string>Reset</string>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>images/icons8-reset-50.png</normaloff>images/icons8-reset-50.png</iconset>
+    </property>
+   </widget>
    <zorder>label_7</zorder>
    <zorder>label_3</zorder>
    <zorder>label</zorder>
@@ -401,13 +361,11 @@ background-color:white
    <zorder>label_5</zorder>
    <zorder>slider_threshold</zorder>
    <zorder>checkbox_invertImage</zorder>
-   <zorder>checkBox_edge_detection</zorder>
-   <zorder>cbb_edge_dectection</zorder>
-   <zorder>checkBox_sharpen_image</zorder>
    <zorder>slider_imgscale</zorder>
    <zorder>label_6</zorder>
    <zorder>label_8</zorder>
    <zorder>label_11</zorder>
+   <zorder>btn_reset</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -443,6 +401,8 @@ background-color:white
      <string>Enhancement</string>
     </property>
     <addaction name="actionHistogram_equal"/>
+    <addaction name="actionLog"/>
+    <addaction name="actionGamma"/>
    </widget>
    <widget class="QMenu" name="menuSmoothing">
     <property name="title">
@@ -456,12 +416,25 @@ background-color:white
      <addaction name="actionMedian"/>
      <addaction name="actionGaussian"/>
     </widget>
+    <widget class="QMenu" name="menuNoise">
+     <property name="title">
+      <string>Noise</string>
+     </property>
+     <addaction name="actionAdd_Noise"/>
+    </widget>
     <addaction name="menuBlur"/>
+    <addaction name="menuNoise"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuImage"/>
    <addaction name="menuEnhancement"/>
    <addaction name="menuSmoothing"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
    <property name="windowTitle">
@@ -562,6 +535,21 @@ background-color:white
   <action name="actionHistogram_equal">
    <property name="text">
     <string>Histogram equal</string>
+   </property>
+  </action>
+  <action name="actionAdd_Noise">
+   <property name="text">
+    <string>Add Noise</string>
+   </property>
+  </action>
+  <action name="actionLog">
+   <property name="text">
+    <string>Logarit</string>
+   </property>
+  </action>
+  <action name="actionGamma">
+   <property name="text">
+    <string>Gamma</string>
    </property>
   </action>
  </widget>
