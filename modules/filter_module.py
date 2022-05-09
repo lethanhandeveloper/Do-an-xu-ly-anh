@@ -1,6 +1,6 @@
 import cv2
 from numpy import random
-
+import numpy as np
 
 def add_noise(img):
     # Getting the dimensions of the image
@@ -57,3 +57,40 @@ def convertValidValue(value):
     if value % 2 == 0:
         value += 1
     return value
+def sobel_filter(img, horizontal, vertical):
+    Vkernel = np.array([[1, 2, 1],
+                        [0, 0, 0],
+                        [-1, -2, -1]])
+
+    Hkernel = np.array([[1, 0, -1],
+                        [2, 0, -2],
+                        [1, 0, -1]])
+    if (horizontal == True and vertical == True):
+        img1 = cv2.filter2D(img, ddepth=-1, kernel=Vkernel)
+        img2 = cv2.filter2D(img, ddepth=-1, kernel=Hkernel)
+        return img1 + img2
+    elif(horizontal == True):
+        return cv2.filter2D(img, ddepth=-1, kernel=Hkernel)
+    elif(vertical == True):
+        return cv2.filter2D(img, ddepth=-1, kernel=Vkernel)
+    return img
+def sobel_sharpen(img, isSobelSharpen):
+    if(isSobelSharpen == True):
+        return img - sobel_filter(img, True, True)
+    return img
+
+def laplace_filter(img, isEDLaplace):
+    kernel = np.array([[0, 1, 0],
+                        [1, -4, 1],
+                        [0, 1, 0]])
+
+    if(isEDLaplace == True):
+        return cv2.filter2D(img, ddepth=-1, kernel=kernel)
+
+    return img
+
+def laplace_sharpen(img, isLaplaceSharpen):
+    if(isLaplaceSharpen == True):
+        return img - laplace_filter(img, True)
+
+    return img

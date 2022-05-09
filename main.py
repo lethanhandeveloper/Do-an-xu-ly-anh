@@ -1,16 +1,15 @@
 import sys, cv2
 
-import numpy
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtGui import QImage, QPixmap
+from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
-from numpy import random
 import numpy as np
-from scipy import ndimage
 
-import blur, image_module
+import blur
+from modules import image_module
 from editvalueform import Ui_Form
 
 from giaodien import Ui_MainWindow
@@ -28,33 +27,48 @@ class MainWindow:
 
     isGray = False
     isInvert = False
-
+    zoomValue = 1.0
     #blur
     gaussianBlurValue = 0
     boxBlurValue = 0
     medianBlurValue = 0
+
+    #sharpen
+    isSobelSharpen = False
+    isLaplaceSharpen = False
+    #edgedetection
+    isSobelHDetection = False
+    isSobelVDetection = False
+    #laplace edge detection
+    isEDLaplace = False
     #image
-    brightValue = 0
+    hueValue = 180
+    brightValue = 50
+    saturationValue = 50
     c = gamma = 1
+    isShearing = False
     isNoise = False
     def __init__(self):
         self.main_win = QMainWindow()
         self.uic = Ui_MainWindow()
         self.uic.setupUi(self.main_win)
+        #'Image Processing Program'
+        self.uic.slider_hue.valueChanged['int'].connect(self.changeHueValue)
         self.uic.slider_brighness.valueChanged['int'].connect(self.changeBrightnessValue)
+        self.uic.slider_saturation.valueChanged['int'].connect(self.changeSaturationValue)
         # self.uic.slider_blur.valueChanged['int'].connect(self.blurEvt)
         self.uic.slider_threshold.valueChanged['int'].connect(self.changeThretholdValue)
         self.uic.actionOpen.triggered.connect(self.openImageEvt)
+        self.uic.actionPrint.triggered.connect(self.printImage)
         self.uic.actionGaussian.triggered.connect(self.openGaussianForm)
         # self.uic.cbb_edge_dectection.addItems(["Java", "C#", "Python"])
         self.uic.actionSave.triggered.connect(self.saveImageEvt)
         self.uic.actionRotation.triggered.connect(self.changeRotateValue)
-        self.uic.checkBox_grayImage.stateChanged.connect(self.grayImageEvt)
-        self.uic.checkbox_invertImage.stateChanged.connect(self.invertImageEvt)
+        self.uic.checkBox_grayImage.clicked.connect(self.grayImageEvt)
+        self.uic.checkbox_invertImage.clicked.connect(self.invertImageEvt)
         self.uic.actionAdd_Noise.triggered.connect(self.actionNoiseEvt)
         # self.uic.rd_btn_medium.toggled.connect(self.changeblurMode)
         # self.uic.rd_btn_gaussian.toggled.connect(self.changeblurMode)
-        self.uic.slider_imgscale.valueChanged['int'].connect(self.scaleImage)
         # self.uic.checkBox.stateChanged.connect(self.checkboxEvt)
         self.uic.actionHistogram_equal.triggered.connect(self.turnHistogramEqual)
         self.figure = plt.figure()
@@ -62,13 +76,95 @@ class MainWindow:
         self.uic.histogramWidget.addWidget(self.canvas)
         self.uic.actionBox.triggered.connect(self.openBoxFilterForm)
         self.uic.actionLog.triggered.connect(self.turnLogarit)
+        
         self.uic.actionMedian.triggered.connect(self.openMedianFilterForm)
         self.uic.btn_reset.clicked.connect(self.reset)
+        #zoom
+        self.uic.actionZoom_in.triggered.connect(self.ZoomInEvt)
+        self.uic.actionZoom_out.triggered.connect(self.ZoomOutEvt)
+        self.uic.actionShearing.triggered.connect(self.turnShearing)
         self.new_image = None
         self.tmp_image = None
+        #sobel sharpen
+        self.uic.actionEDSobel.triggered.connect(self.sobelSharpen)
+        #sobel edge detection
+        self.uic.actionEDHorizontalSobel.triggered.connect(self.horizontalSobelEdgeDetection)
+        self.uic.actionEDVerticalSobel.triggered.connect(self.verticalSobelEdgeDetection)
+        #laplace edge dectection
+        self.uic.actionEDLaplace_2.triggered.connect(self.laplaceEdgeDetection)
+        #laplace sharpen
+        self.uic.actionLaplaceSharpen.triggered.connect(self.laplaceSharpen)
+    def laplaceSharpen(self):
+        if(self.isLaplaceSharpen == True):
+            self.isLaplaceSharpen = False
+        else:
+            self.isLaplaceSharpen = True
+
+        self.showImage()
+    def laplaceEdgeDetection(self):
+        if(self.isEDLaplace == True):
+            self.isEDLaplace = False
+        else:
+            self.isEDLaplace = True
+
+        self.showImage()
+    def sobelSharpen(self):
+        self.isSobelSharpen = True
+
+        self.showImage()
+    def horizontalSobelEdgeDetection(self):
+        if(self.isSobelHDetection == False):
+            self.isSobelHDetection = True
+        elif():
+            self.isSobelHDetection = False
+        
+        self.showImage()
+
+    def verticalSobelEdgeDetection(self):
+        if (self.isSobelVDetection == False):
+            self.isSobelVDetection = True
+        elif ():
+            self.isSobelVDetection = False
+
+        self.showImage()
+    def resetComponentValue(self):
+        self.uic.slider_brighness.setProperty("value", 50)
+        self.uic.slider_saturation.setProperty("value", 50)
+        self.uic.slider_hue.setProperty("value", 180)
+        self.uic.slider_threshold.setProperty("value", 0)
+        self.uic.checkBox_grayImage.setChecked(False)
+        self.uic.checkbox_invertImage.setChecked(False)
+    def turnShearing(self):
+        if(self.isShearing == False):
+            self.isShearing = True
+        else:
+            self.isShearing = False
+
+        self.showImage()
+    def printImage(self):
+        printer = QPrinter(QPrinter.HighResolution)
+        dialog = QPrintDialog(printer, self.uic)
+
+        if dialog.exec_() == QPrintDialog.Accepted:
+            self.uic.lbl_newPhoto.print_(printer)
+    def ZoomInEvt(self):
+        print('in', round(self.zoomValue, 1))
+        if(round(self.zoomValue, 1) > 0.1):
+            self.changeScaleValue(-0.1)
+    def ZoomOutEvt(self):
+        print('out', round(self.zoomValue, 1))
+        if(round(self.zoomValue, 1) < 2):
+            self.changeScaleValue(0.1)
+    def changeScaleValue(self, value):
+        self.zoomValue += value
+        self.zoomValue = round(self.zoomValue, 1)
+
+        self.showImage()
     def reset(self):
         self.initial_variable()
+        self.resetComponentValue()
 
+        print('resetisGray', self.isGray)
         self.showImage()
     def initial_variable(self):
         self.thresholdValue = 0;
@@ -85,9 +181,16 @@ class MainWindow:
         self.boxBlurValue = 0
         self.medianBlurValue = 0
         # image
-        self.brightValue = 0
+        self.brightValue = 50
+        self.saturationValue = 50
         self.c = self.gamma = 1
+        self.zoomValue = 1
         self.isNoise = False
+        #edgedetection
+        self.isSobelHDetection = False
+        self.isSobelVDetection = False
+        print('isgrayyyyyy', self.isGray)
+        # self.showImage()
     def openMedianFilterForm(self):
         self.openEdtForm(3)
     def openBoxFilterForm(self):
@@ -126,13 +229,13 @@ class MainWindow:
 
 
     def scaleImage(self, value):
-        self.new_image = cv2.resize(self.new_image, None, fx=value+1, fy=value+1, interpolation=cv2.INTER_CUBIC)
+
         self.showImage()
     def sharpenImageEvt(self):
         print('')
     def Tich_chap(self, mask):
         self.new_image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
-        print('cscscscsxs', self.image)
+
         m, n, c = self.new_image.shape
         img_new = np.zeros([m, n])
         for i in range(1, m - 1):
@@ -234,6 +337,7 @@ class MainWindow:
             self.isGray = False
         else:
             self.isGray = True
+
         self.showImage()
     def invertImageEvt(self):
         if(self.isInvert == True):
@@ -274,12 +378,11 @@ class MainWindow:
         elif(self.uic.rd_btn_gaussian.isChecked()):
             blur.mode = 1
             blur.mode = 1
-        print(blur.mode)
+
     def convertImagetoDisplay(self, image):
         if(len(image.shape) == 2):
             h, w = self.new_image.shape
             bytesPerLine = 3 * w
-            cv2.imshow('sssss', self.new_image)
             image = QtGui.QImage(image.data, w, h, bytesPerLine, QtGui.QImage.Format_Grayscale8).rgbSwapped()
         else:
             h, w, c = image.shape
@@ -288,18 +391,50 @@ class MainWindow:
         return image
     def show(self):
         self.main_win.show()
+    def changeHueValue(self, value):
+        self.hueValue = value
+
+        self.showImage()
     def changeBrightnessValue(self, value):
         self.brightValue = value
 
         self.showImage()
-    def updateBrighness(self):
+    def changeSaturationValue(self, value):
+        self.saturationValue = value
+        
+        self.showImage()
+    def updateHSVSpace(self, type):
         hsv = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2HSV)
-        # print(self.new_image)
+
         h, s, v = cv2.split(hsv)
-        # distance = abs(value-self.brightValue)
-        lim = 255 - self.brightValue
-        v[v > lim] = 255
-        v[v <= lim] += self.brightValue
+
+        if(type == 1):
+            distance = abs(180 - self.hueValue)
+
+            if (self.hueValue < 180):
+                h[h > h - distance] -= distance
+                h[h <= h - distance] = 0
+            elif(self.hueValue > 180):
+                h[h < h + distance] += distance
+                h[h >= h + distance] = 179
+        elif(type == 2):
+            distance = abs(50 - self.saturationValue)
+
+            if (self.saturationValue < 50):
+                s[s > s - distance] -= distance
+                s[s <= s - distance] = 0
+            else:
+                s[s < s + distance] += distance
+                s[s >= s + distance] = 255
+        elif(type == 3):
+            distance = abs(50 - self.brightValue)
+
+            if (self.brightValue < 50):
+                v[v > v - distance] -= distance
+                v[v <= v - distance] = 0
+            else:
+                v[v < v + distance] += distance
+                v[v >= v + distance] = 255
         final_hsv = cv2.merge((h, s, v))
         self.new_image = cv2.cvtColor(final_hsv, cv2.COLOR_HSV2BGR)
         # print("H",h,"S :", s, "V:", v)
@@ -335,16 +470,17 @@ class MainWindow:
                                            'Image Files (*.png *.jpg *.bmp *.tif)')
         if f[0] != '':
             self.image = cv2.imread(f[0])
-            print('so chieu', len(self.image.shape))
-            print('imageeeeeeeee', self.image)
+            # print('so chieu', len(self.image.shape))
+            # print('imageeeeeeeee', self.image)
             self.new_image =  self.image
+            self.tmp_image = self.image
 
-            self.brightValue = 0
             self.uic.slider_brighness.setValue(self.brightValue)
 
             self.selectedImage = True
             self.initial_variable()
 
+            self.resetComponentValue()
             self.showImage()
     def showImage(self):
         self.updateChange()
@@ -365,11 +501,16 @@ class MainWindow:
 
         self.updateHistogram()
     def updateChange(self):
-        self.new_image = self.image
+        self.new_image = self.tmp_image
+        self.image = self.tmp_image
 
         #update brighness
-        if(self.brightValue != 0):
-            self.updateBrighness()
+        if (self.hueValue != 50):
+            self.updateHSVSpace(1)
+        if(self.saturationValue != 50):
+            self.updateHSVSpace(2)
+        if(self.brightValue != 50):
+            self.updateHSVSpace(3)
         if(self.thresholdValue != 0):
             self.updateThrehold()
         if(self.rotateValue >= 0):
@@ -381,10 +522,15 @@ class MainWindow:
         self.new_image = filter_module.box_blur(self.new_image, self.boxBlurValue)
         #median blur
         self.new_image = filter_module.median_blur(self.new_image, self.medianBlurValue)
+
+        #sharpen
+        self.new_image = filter_module.laplace_sharpen(self.new_image, self.isLaplaceSharpen)
+
         if(self.isHistogram_Equal == True):
             self.histogramEqual()
         if(self.isGray == True):
             self.new_image = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2GRAY)
+
         if(self.isInvert == True):
             self.new_image = 255 - self.new_image
         if(self.isNoise == True):
@@ -392,6 +538,16 @@ class MainWindow:
             self.isNoise = False
         if(self.c > 1 or self.gamma > 1):
             self.new_image = float(self.c) * cv2.log(self.gamma + self.new_image)
+        #zoom
+        self.new_image = cv2.resize(self.new_image, None, fx=self.zoomValue, fy=self.zoomValue, interpolation=cv2.INTER_CUBIC)
+        self.image = cv2.resize(self.image, None, fx=self.zoomValue, fy=self.zoomValue, interpolation=cv2.INTER_CUBIC)
+        if(self.isShearing == True):
+            self.new_image = image_module.shearing(self.new_image)
+        #edge detection
+        self.new_image = filter_module.sobel_filter(self.new_image, self.isSobelHDetection, self.isSobelVDetection)
+        self.new_image = filter_module.sobel_sharpen(self.new_image, self.isSobelSharpen)
+        #simple laplace edge detection
+        self.new_image = filter_module.laplace_filter(self.new_image, self.isEDLaplace)
     # rows, cols, steps = self.new_image.shape
     # M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)  # thay đổi chiều của ảnh
     # self.new_image = cv2.warpAffine(self.new_image, M, (cols, rows))

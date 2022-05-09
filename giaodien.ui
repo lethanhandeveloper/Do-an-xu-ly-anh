@@ -36,7 +36,7 @@ background-color:white
      <string/>
     </property>
     <property name="scaledContents">
-     <bool>true</bool>
+     <bool>false</bool>
     </property>
    </widget>
    <widget class="QLabel" name="lbl_newPhoto">
@@ -58,7 +58,10 @@ background-color:white
      <string/>
     </property>
     <property name="scaledContents">
-     <bool>true</bool>
+     <bool>false</bool>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -97,10 +100,19 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>280</y>
+      <y>410</y>
       <width>321</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>100</number>
+    </property>
+    <property name="value">
+     <number>50</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -110,7 +122,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>250</y>
+      <y>370</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -157,28 +169,11 @@ background-color:white
     </property>
     <layout class="QVBoxLayout" name="histogramWidget"/>
    </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>1180</x>
-      <y>390</y>
-      <width>261</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border:none
-</string>
-    </property>
-    <property name="title">
-     <string/>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>310</y>
+      <y>430</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -195,7 +190,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>340</y>
+      <y>460</y>
       <width>321</width>
       <height>22</height>
      </rect>
@@ -227,30 +222,51 @@ background-color:white
      <string>Đảo ảnh</string>
     </property>
    </widget>
-   <widget class="QSlider" name="slider_imgscale">
+   <widget class="QSlider" name="slider_saturation">
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>400</y>
+      <y>340</y>
       <width>321</width>
       <height>22</height>
      </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>100</number>
     </property>
     <property name="pageStep">
      <number>10</number>
     </property>
     <property name="value">
-     <number>0</number>
+     <number>50</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
+    </property>
+    <property name="invertedAppearance">
+     <bool>false</bool>
+    </property>
+    <property name="invertedControls">
+     <bool>false</bool>
+    </property>
+    <property name="tickPosition">
+     <enum>QSlider::NoTicks</enum>
+    </property>
+    <property name="tickInterval">
+     <number>4</number>
     </property>
    </widget>
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>370</y>
+      <y>320</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -260,7 +276,7 @@ background-color:white
 </string>
     </property>
     <property name="text">
-     <string>Scale</string>
+     <string>Saturation</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_7">
@@ -348,6 +364,53 @@ background-color:white
       <normaloff>images/icons8-reset-50.png</normaloff>images/icons8-reset-50.png</iconset>
     </property>
    </widget>
+   <widget class="QSlider" name="slider_hue">
+    <property name="geometry">
+     <rect>
+      <x>1120</x>
+      <y>280</y>
+      <width>321</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>0</number>
+    </property>
+    <property name="maximum">
+     <number>360</number>
+    </property>
+    <property name="pageStep">
+     <number>10</number>
+    </property>
+    <property name="value">
+     <number>180</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+    <property name="tickPosition">
+     <enum>QSlider::TicksBelow</enum>
+    </property>
+    <property name="tickInterval">
+     <number>25</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>1120</x>
+      <y>260</y>
+      <width>55</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:white</string>
+    </property>
+    <property name="text">
+     <string>Hue</string>
+    </property>
+   </widget>
    <zorder>label_7</zorder>
    <zorder>label_3</zorder>
    <zorder>label</zorder>
@@ -357,15 +420,16 @@ background-color:white
    <zorder>label_4</zorder>
    <zorder>checkBox_grayImage</zorder>
    <zorder>verticalLayoutWidget</zorder>
-   <zorder>groupBox</zorder>
    <zorder>label_5</zorder>
    <zorder>slider_threshold</zorder>
    <zorder>checkbox_invertImage</zorder>
-   <zorder>slider_imgscale</zorder>
+   <zorder>slider_saturation</zorder>
    <zorder>label_6</zorder>
    <zorder>label_8</zorder>
    <zorder>label_11</zorder>
    <zorder>btn_reset</zorder>
+   <zorder>slider_hue</zorder>
+   <zorder>label_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -422,8 +486,34 @@ background-color:white
      </property>
      <addaction name="actionAdd_Noise"/>
     </widget>
+    <widget class="QMenu" name="menuSharpen">
+     <property name="title">
+      <string>Sharpen</string>
+     </property>
+     <addaction name="actionSobel_3"/>
+     <addaction name="actionLaplaceSharpen"/>
+    </widget>
+    <widget class="QMenu" name="menuEdge_Detection">
+     <property name="title">
+      <string>Edge Detection</string>
+     </property>
+     <widget class="QMenu" name="menuSobel">
+      <property name="title">
+       <string>Sobel</string>
+      </property>
+      <addaction name="actionEDHorizontalSobel"/>
+      <addaction name="actionEDVerticalSobel"/>
+     </widget>
+     <addaction name="menuSobel"/>
+     <addaction name="actionScharr"/>
+     <addaction name="actionPrewitt"/>
+     <addaction name="actionRoberts"/>
+     <addaction name="actionEDLaplace_2"/>
+    </widget>
     <addaction name="menuBlur"/>
     <addaction name="menuNoise"/>
+    <addaction name="menuSharpen"/>
+    <addaction name="menuEdge_Detection"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -451,6 +541,9 @@ background-color:white
    <addaction name="actionPrint"/>
    <addaction name="actionExit"/>
    <addaction name="separator"/>
+   <addaction name="actionZoom_out"/>
+   <addaction name="actionZoom_in"/>
+   <addaction name="actionRotation"/>
   </widget>
   <action name="actionOpen">
    <property name="icon">
@@ -498,6 +591,10 @@ background-color:white
    </property>
   </action>
   <action name="actionRotation">
+   <property name="icon">
+    <iconset>
+     <normaloff>images/icons8-3d-rotate-48.png</normaloff>images/icons8-3d-rotate-48.png</iconset>
+   </property>
    <property name="text">
     <string>Rotation</string>
    </property>
@@ -508,11 +605,19 @@ background-color:white
    </property>
   </action>
   <action name="actionZoom_in">
+   <property name="icon">
+    <iconset>
+     <normaloff>images/zoom_out_icon.png</normaloff>images/zoom_out_icon.png</iconset>
+   </property>
    <property name="text">
     <string>Zoom in 10%</string>
    </property>
   </action>
   <action name="actionZoom_out">
+   <property name="icon">
+    <iconset>
+     <normaloff>images/zoom_in_icon.png</normaloff>images/zoom_in_icon.png</iconset>
+   </property>
    <property name="text">
     <string>Zoom out 10%</string>
    </property>
@@ -550,6 +655,81 @@ background-color:white
   <action name="actionGamma">
    <property name="text">
     <string>Gamma</string>
+   </property>
+  </action>
+  <action name="actionDerivatives">
+   <property name="text">
+    <string>Derivatives</string>
+   </property>
+  </action>
+  <action name="actionLaplace">
+   <property name="text">
+    <string>Laplace</string>
+   </property>
+  </action>
+  <action name="actionSobel">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
+  <action name="actionEDSobel">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
+  <action name="actionEDScharr">
+   <property name="text">
+    <string>Scharr</string>
+   </property>
+  </action>
+  <action name="actionEDPrewitt">
+   <property name="text">
+    <string>Prewitt</string>
+   </property>
+  </action>
+  <action name="actionEDRoberts">
+   <property name="text">
+    <string>Roberts</string>
+   </property>
+  </action>
+  <action name="actionScharr">
+   <property name="text">
+    <string>Scharr</string>
+   </property>
+  </action>
+  <action name="actionPrewitt">
+   <property name="text">
+    <string>Prewitt</string>
+   </property>
+  </action>
+  <action name="actionRoberts">
+   <property name="text">
+    <string>Roberts</string>
+   </property>
+  </action>
+  <action name="actionEDHorizontalSobel">
+   <property name="text">
+    <string>Horizontal</string>
+   </property>
+  </action>
+  <action name="actionEDVerticalSobel">
+   <property name="text">
+    <string>Vertical</string>
+   </property>
+  </action>
+  <action name="actionEDLaplace_2">
+   <property name="text">
+    <string>Laplace</string>
+   </property>
+  </action>
+  <action name="actionSobel_3">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
+  <action name="actionLaplaceSharpen">
+   <property name="text">
+    <string>Laplace</string>
    </property>
   </action>
  </widget>
