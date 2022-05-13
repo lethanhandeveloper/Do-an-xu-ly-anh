@@ -18,7 +18,6 @@ class MainWindow:
     image = None
     new_image = None
 
-
     thresholdValue = 0;
     selectedImage = False
     rotateValue = 0
@@ -85,15 +84,14 @@ class MainWindow:
         self.uic.actionShearing.triggered.connect(self.turnShearing)
         self.new_image = None
         self.tmp_image = None
-        #sobel sharpen
-        self.uic.actionEDSobel.triggered.connect(self.sobelSharpen)
+        #sharpen
+        self.uic.actionSobelSharpen.triggered.connect(self.sobelSharpen)
+        self.uic.actionLaplaceSharpen.triggered.connect(self.laplaceSharpen)
         #sobel edge detection
         self.uic.actionEDHorizontalSobel.triggered.connect(self.horizontalSobelEdgeDetection)
         self.uic.actionEDVerticalSobel.triggered.connect(self.verticalSobelEdgeDetection)
         #laplace edge dectection
         self.uic.actionEDLaplace_2.triggered.connect(self.laplaceEdgeDetection)
-        #laplace sharpen
-        self.uic.actionLaplaceSharpen.triggered.connect(self.laplaceSharpen)
     def laplaceSharpen(self):
         if(self.isLaplaceSharpen == True):
             self.isLaplaceSharpen = False
@@ -253,85 +251,6 @@ class MainWindow:
                 img_new[i, j] = temp
         img_new = img_new.astype(np.uint8)
         return img_new
-    def checkBox_edgeDetectionEvt(self):
-        # roberts_cross_v = np.array([[1, 0],
-        #                             [0, -1]])
-        #
-        # roberts_cross_h = np.array([[0, 1],
-        #                             [-1, 0]])
-        # self.new_image = self.new_image.astype('float64')
-        # self.new_image /= 255.0
-        # vertical = ndimage.convolve(self.new_image, roberts_cross_v)
-        # horizontal = ndimage.convolve(self.new_image, roberts_cross_h)
-        #
-        # self.new_image = np.sqrt(np.square(horizontal) + np.square(vertical))
-        # self.new_image *= 255
-        # # print(self.new_image)
-        # self.showImage()
-        # Định nghĩa Sobel theo hướng X
-
-        # locSobelX = np.array(([-1, -2, -1],
-        #                       [0, 0, 0],
-        #                       [1, 2, 1]), dtype="float")
-        #
-        # # Định nghĩa bộ lọc Sobel theo hướng Y
-        # locSobelY = np.array(([-1, 0, 1],
-        #                       [-2, 0, 2],
-        #                       [1, 0, 1]), dtype="float")
-        # imgSobelX = self.Tich_chap(self.new_image, locSobelX)
-        #
-        # imgSobelY = self.Tich_chap(self.new_image, locSobelY)
-        #
-        # imgSobelXY = imgSobelX + imgSobelY
-        #
-        # self.new_image = imgSobelXY
-        # self.showImage()
-        # self.new_image = cv2.Canny(self.new_image, cv2.CV_64F, dx=0, dy=1, ksize=5)
-        # cv2.imshow("ddđ", self.new_image)
-        # self.showImage()
-        # locSobelX = np.array(([-1, -2, -1],
-        #                       [0, 0, 0],
-        #                       [1, 2, 1]), dtype="float")
-
-        # Định nghĩa bộ lọc Sobel theo hướng Y
-        # locSobelY = np.array(([-1, 0, 1],
-        #                       [-2, 0, 2],
-        #                       [1, 0, 1]), dtype="float")
-        # locGaussian3x3 = np.array(([0.0751 / 4.8976, 0.1238 / 4.8976, 0.0751 / 4.8976],
-        #                            [0.1238 / 4.8976, 0.2042 / 4.8976, 0.1238 / 4.8976],
-        #                            [0.0751 / 4.8976, 0.1238 / 4.8976, 0.0751 / 4.8976]), dtype="float")
-        # image = self.Tich_chap(locGaussian3x3)
-        #
-        # imgSobelX = self.Tich_chap(locSobelX)
-        #
-        # imgSobelY = self.Tich_chap(locSobelY)
-        #
-        # imgSobelXY = imgSobelX + imgSobelY
-        #
-        # self.new_image = image + imgSobelXY
-        # cv2.imshow('ddd', self.new_image)
-        gray = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2GRAY)
-        img_gaussian = cv2.GaussianBlur(gray, (3, 3), 0)
-
-        # sobel
-        img_sobelx = cv2.Sobel(img_gaussian, cv2.CV_8U, 1, 0, ksize=3)
-        img_sobely = cv2.Sobel(img_gaussian, cv2.CV_8U, 0, 1, ksize=3)
-
-        img_sobel = (img_sobelx + img_sobely) / 2
-        for i in range(img_sobel.shape[0]):
-            for j in range(img_sobel.shape[1]):
-                if img_sobel[i][j] < 20:
-                    img_sobel[i][j] = 0
-                else:
-                    img_sobel[i][j] = 255
-        self.new_image = img_sobel
-        fig = plt.figure(figsize=(16, 9))  # Tạo vùng vẽ tỷ lệ 16:9
-        ax1= fig.subplots(1, 1)  # Tạo 6 vùng vẽ con
-        ax1.imshow(self.new_image, cmap='gray')
-        ax1.set_title("Ảnh gốc")
-        plt.show()
-        # cv2.imshow('dddd', self.new_image)
-        self.showImage()
     def grayImageEvt(self):
         if(self.isGray == True):
             self.isGray = False
@@ -469,6 +388,7 @@ class MainWindow:
         f = QFileDialog.getOpenFileName(None, 'Open a file', '',
                                            'Image Files (*.png *.jpg *.bmp *.tif)')
         if f[0] != '':
+
             self.image = cv2.imread(f[0])
             # print('so chieu', len(self.image.shape))
             # print('imageeeeeeeee', self.image)
@@ -477,7 +397,6 @@ class MainWindow:
 
             self.uic.slider_brighness.setValue(self.brightValue)
 
-            self.selectedImage = True
             self.initial_variable()
 
             self.resetComponentValue()
@@ -537,7 +456,13 @@ class MainWindow:
             self.new_image = filter_module.add_noise(self.new_image)
             self.isNoise = False
         if(self.c > 1 or self.gamma > 1):
-            self.new_image = float(self.c) * cv2.log(self.gamma + self.new_image)
+            gamma = 1.5
+            invGamma = 1.0 / gamma
+            table = np.array([((i / 255.0) ** invGamma) * 255
+                              for i in np.arange(0, 256)]).astype("uint8")
+
+            self.image = cv2.LUT(self.new_image, table)
+            self.displayImage(2)
         #zoom
         self.new_image = cv2.resize(self.new_image, None, fx=self.zoomValue, fy=self.zoomValue, interpolation=cv2.INTER_CUBIC)
         self.image = cv2.resize(self.image, None, fx=self.zoomValue, fy=self.zoomValue, interpolation=cv2.INTER_CUBIC)
@@ -546,13 +471,8 @@ class MainWindow:
         #edge detection
         self.new_image = filter_module.sobel_filter(self.new_image, self.isSobelHDetection, self.isSobelVDetection)
         self.new_image = filter_module.sobel_sharpen(self.new_image, self.isSobelSharpen)
-        #simple laplace edge detection
+    #simple laplace edge detection
         self.new_image = filter_module.laplace_filter(self.new_image, self.isEDLaplace)
-    # rows, cols, steps = self.new_image.shape
-    # M = cv2.getRotationMatrix2D((cols / 2, rows / 2), 90, 1)  # thay đổi chiều của ảnh
-    # self.new_image = cv2.warpAffine(self.new_image, M, (cols, rows))
-    #
-    # self.showImage()
     def updateHistogram(self):
         # random data
         # data = [random.random() for i in range(10)]

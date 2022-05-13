@@ -490,7 +490,7 @@ background-color:white
      <property name="title">
       <string>Sharpen</string>
      </property>
-     <addaction name="actionSobel_3"/>
+     <addaction name="actionSobelSharpen"/>
      <addaction name="actionLaplaceSharpen"/>
     </widget>
     <widget class="QMenu" name="menuEdge_Detection">
@@ -722,7 +722,7 @@ background-color:white
     <string>Laplace</string>
    </property>
   </action>
-  <action name="actionSobel_3">
+  <action name="actionSobelSharpen">
    <property name="text">
     <string>Sobel</string>
    </property>

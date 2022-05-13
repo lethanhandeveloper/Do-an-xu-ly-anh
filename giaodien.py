@@ -284,8 +284,8 @@ class Ui_MainWindow(object):
         self.actionEDVerticalSobel.setObjectName("actionEDVerticalSobel")
         self.actionEDLaplace_2 = QtWidgets.QAction(MainWindow)
         self.actionEDLaplace_2.setObjectName("actionEDLaplace_2")
-        self.actionSobel_3 = QtWidgets.QAction(MainWindow)
-        self.actionSobel_3.setObjectName("actionSobel_3")
+        self.actionSobelSharpen = QtWidgets.QAction(MainWindow)
+        self.actionSobelSharpen.setObjectName("actionSobelSharpen")
         self.actionLaplaceSharpen = QtWidgets.QAction(MainWindow)
         self.actionLaplaceSharpen.setObjectName("actionLaplaceSharpen")
         self.menuFile.addAction(self.actionOpen)
@@ -305,7 +305,7 @@ class Ui_MainWindow(object):
         self.menuBlur.addAction(self.actionMedian)
         self.menuBlur.addAction(self.actionGaussian)
         self.menuNoise.addAction(self.actionAdd_Noise)
-        self.menuSharpen.addAction(self.actionSobel_3)
+        self.menuSharpen.addAction(self.actionSobelSharpen)
         self.menuSharpen.addAction(self.actionLaplaceSharpen)
         self.menuSobel.addAction(self.actionEDHorizontalSobel)
         self.menuSobel.addAction(self.actionEDVerticalSobel)
@@ -387,7 +387,7 @@ class Ui_MainWindow(object):
         self.actionEDHorizontalSobel.setText(_translate("MainWindow", "Horizontal"))
         self.actionEDVerticalSobel.setText(_translate("MainWindow", "Vertical"))
         self.actionEDLaplace_2.setText(_translate("MainWindow", "Laplace"))
-        self.actionSobel_3.setText(_translate("MainWindow", "Sobel"))
+        self.actionSobelSharpen.setText(_translate("MainWindow", "Sobel"))
         self.actionLaplaceSharpen.setText(_translate("MainWindow", "Laplace"))
 
 
