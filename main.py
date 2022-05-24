@@ -2,6 +2,10 @@ import sys, cv2
 
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtGui import QImage, QPixmap
+<<<<<<< HEAD
+=======
+from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
+>>>>>>> an
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -9,19 +13,22 @@ import numpy as np
 
 import blur
 from modules import image_module
+<<<<<<< HEAD
 from modules import filter_module
+=======
+>>>>>>> an
 from editvalueform import Ui_Form
 
 from giaodien import Ui_MainWindow
-
+from modules import filter_module
 class MainWindow:
     image = None
     new_image = None
 
-    brightValue = 0;
     thresholdValue = 0;
     selectedImage = False
     rotateValue = 0
+<<<<<<< HEAD
     isHistogram_Equal = False
     isGray = False
     isInvert = False
@@ -30,56 +37,225 @@ class MainWindow:
     #Blur
     gaussianValue = 0
 
+=======
+
+    isHistogram_Equal = False
+
+    isGray = False
+    isInvert = False
+    zoomValue = 1.0
+    #blur
+    gaussianBlurValue = 0
+    boxBlurValue = 0
+    medianBlurValue = 0
+    averageBlurValue = 0
+    #sharpen
+    isSobelSharpen = False
+    isLaplaceSharpen = False
+
+    #edgedetection
+    isSobelHDetection = False
+    isSobelVDetection = False
+    isRobertsED = False
+    #laplace edge detection
+    isEDLaplace = False
+    #image
+    hueValue = 180
+    brightValue = 50
+    saturationValue = 50
+    isGamma = False
+    isShearing = False
+    isNoise = False
+>>>>>>> an
     def __init__(self):
         self.main_win = QMainWindow()
         self.uic = Ui_MainWindow()
         self.uic.setupUi(self.main_win)
+        #'Image Processing Program'
+        self.uic.slider_hue.valueChanged['int'].connect(self.changeHueValue)
         self.uic.slider_brighness.valueChanged['int'].connect(self.changeBrightnessValue)
+        self.uic.slider_saturation.valueChanged['int'].connect(self.changeSaturationValue)
         # self.uic.slider_blur.valueChanged['int'].connect(self.blurEvt)
         self.uic.slider_threshold.valueChanged['int'].connect(self.changeThretholdValue)
         self.uic.actionOpen.triggered.connect(self.openImageEvt)
+<<<<<<< HEAD
         self.uic.actionGaussian.triggered.connect(self.gaussianFormEvt)
+=======
+        self.uic.actionPrint.triggered.connect(self.printImage)
+        self.uic.actionGaussian.triggered.connect(self.openGaussianForm)
+>>>>>>> an
         # self.uic.cbb_edge_dectection.addItems(["Java", "C#", "Python"])
         self.uic.actionSave.triggered.connect(self.saveImageEvt)
         self.uic.actionRotation.triggered.connect(self.changeRotateValue)
-        self.uic.checkBox_grayImage.stateChanged.connect(self.grayImageEvt)
-        self.uic.checkbox_invertImage.stateChanged.connect(self.invertImageEvt)
-        self.uic.checkBox_sharpen_image.stateChanged.connect(self.sharpenImageEvt)
+        self.uic.checkBox_grayImage.clicked.connect(self.grayImageEvt)
+        self.uic.checkbox_invertImage.clicked.connect(self.invertImageEvt)
+        self.uic.actionAdd_Noise.triggered.connect(self.actionNoiseEvt)
         # self.uic.rd_btn_medium.toggled.connect(self.changeblurMode)
         # self.uic.rd_btn_gaussian.toggled.connect(self.changeblurMode)
-        self.uic.slider_imgscale.valueChanged['int'].connect(self.scaleImage)
-        self.uic.checkBox_edge_detection.stateChanged.connect(self.checkBox_edgeDetectionEvt)
         # self.uic.checkBox.stateChanged.connect(self.checkboxEvt)
         self.uic.actionHistogram_equal.triggered.connect(self.turnHistogramEqual)
         self.figure = plt.figure()
         self.canvas = FigureCanvas(self.figure)
         self.uic.histogramWidget.addWidget(self.canvas)
+        self.uic.actionBox.triggered.connect(self.openBoxFilterForm)
+        self.uic.actionLog.triggered.connect(self.turnLogarit)
 
-        self.uic.actionShearing.triggered.connect(self.turnShearing)
+        self.uic.actionAverage.triggered.connect(self.openAverageBlueForm)
+        self.uic.actionMedian.triggered.connect(self.openMedianFilterForm)
+        self.uic.btn_reset.clicked.connect(self.reset)
         #zoom
-        self.uic.actionZoom_in.triggered.connect(self.changeValueZoom)
+        self.uic.actionZoom_in.triggered.connect(self.ZoomInEvt)
+        self.uic.actionZoom_out.triggered.connect(self.ZoomOutEvt)
+        self.uic.actionShearing.triggered.connect(self.turnShearing)
         self.new_image = None
         self.tmp_image = None
-    def turnShearing(self):
-        print(self.isShearing)
-        if(self.isShearing == True):
-            self.isShearing = False
+        #sharpen
+        self.uic.actionSobelSharpen.triggered.connect(self.sobelSharpen)
+        self.uic.actionLaplaceSharpen.triggered.connect(self.laplaceSharpen)
+        #sobel edge detection
+        self.uic.actionEDHorizontalSobel.triggered.connect(self.horizontalSobelEdgeDetection)
+        self.uic.actionEDVerticalSobel.triggered.connect(self.verticalSobelEdgeDetection)
+        #laplace edge dectection
+        self.uic.actionEDLaplace_2.triggered.connect(self.laplaceEdgeDetection)
+
+        self.uic.actionGamma.triggered.connect(self.changeGammaValue)
+        #roberts edge detection
+        self.uic.actionRoberts.triggered.connect(self.robertsEdgeDetection)
+    def openAverageBlueForm(self, value):
+        self.openEdtForm(5)
+    def changeGammaValue(self):
+        if (self.isGamma == False):
+            self.isGamma = True
         else:
-            self.isShearing = True
+            self.isGamma = False
 
         self.showImage()
-    def gaussianFormEvt(self):
-        self.openEditValueForm(1)
+    def robertsEdgeDetection(self):
+        if (self.isRobertsED == True):
+            self.isRobertsED = False
+        else:
+            self.isRobertsED = True
 
-    def openEditValueForm(self, type):
-        self.edt_window = QtWidgets.QMainWindow()
+        self.showImage()
+    def laplaceSharpen(self):
+        if(self.isLaplaceSharpen == True):
+            self.isLaplaceSharpen = False
+        else:
+            self.isLaplaceSharpen = True
 
-        self.ui = Ui_Form(self, type)
-        self.ui.setupUi(self.edt_window)
+        self.showImage()
+    def laplaceEdgeDetection(self):
+        if(self.isEDLaplace == True):
+            self.isEDLaplace = False
+        else:
+            self.isEDLaplace = True
 
-        self.edt_window.show()
-    def changeValueZoom(self):
-        image_module.zoomValue += 0.1
+        self.showImage()
+    def sobelSharpen(self):
+        if (self.isSobelSharpen == True):
+            self.isSobelSharpen = False
+        else:
+            self.isSobelSharpen = True
+
+        self.showImage()
+    def horizontalSobelEdgeDetection(self):
+        if(self.isSobelHDetection == False):
+            self.isSobelHDetection = True
+        elif():
+            self.isSobelHDetection = False
+        
+        self.showImage()
+
+    def verticalSobelEdgeDetection(self):
+        if (self.isSobelVDetection == False):
+            self.isSobelVDetection = True
+        elif ():
+            self.isSobelVDetection = False
+
+        self.showImage()
+    def resetComponentValue(self):
+        self.uic.slider_brighness.setProperty("value", 50)
+        self.uic.slider_saturation.setProperty("value", 50)
+        self.uic.slider_hue.setProperty("value", 180)
+        self.uic.slider_threshold.setProperty("value", 0)
+        self.uic.checkBox_grayImage.setChecked(False)
+        self.uic.checkbox_invertImage.setChecked(False)
+    def turnShearing(self):
+        if(self.isShearing == False):
+            self.isShearing = True
+        else:
+            self.isShearing = False
+
+        self.showImage()
+    def printImage(self):
+        printer = QPrinter(QPrinter.HighResolution)
+        dialog = QPrintDialog(printer, self.uic)
+
+        if dialog.exec_() == QPrintDialog.Accepted:
+            self.uic.lbl_newPhoto.print_(printer)
+    def ZoomInEvt(self):
+        print('in', round(self.zoomValue, 1))
+        if(round(self.zoomValue, 1) > 0.1):
+            self.changeScaleValue(-0.1)
+    def ZoomOutEvt(self):
+        print('out', round(self.zoomValue, 1))
+        if(round(self.zoomValue, 1) < 2):
+            self.changeScaleValue(0.1)
+    def changeScaleValue(self, value):
+        self.zoomValue += value
+        self.zoomValue = round(self.zoomValue, 1)
+
+        self.showImage()
+    def reset(self):
+        self.initial_variable()
+        self.resetComponentValue()
+
+        print('resetisGray', self.isGray)
+        self.showImage()
+    def initial_variable(self):
+        self.thresholdValue = 0;
+        self.selectedImage = False
+        self.rotateValue = 0
+
+        self.isHistogram_Equal = False
+
+        self.isShearing = False
+        self.isGray = False
+        self.isInvert = False
+
+        # blur
+        self.gaussianBlurValue = 0
+        self.boxBlurValue = 0
+        self.medianBlurValue = 0
+        self.averageBlurValue = 0
+        # image
+        self.brightValue = 50
+        self.saturationValue = 50
+        self.c = self.gamma = 1
+        self.zoomValue = 1
+        self.isNoise = False
+        #edgedetection
+        self.isSobelHDetection = False
+        self.isSobelVDetection = False
+        print('isgrayyyyyy', self.isGray)
+        #sharpen
+        self.isSobelSharpen = False
+        self.isLaplaceSharpen = False
+        # self.showImage()
+    def openMedianFilterForm(self):
+        self.openEdtForm(3)
+    def openBoxFilterForm(self):
+        self.openEdtForm(2)
+
+    def turnLogarit(self):
+        self.openEdtForm(10)
+
+        self.showImage()
+    def actionNoiseEvt(self):
+        if(self.isNoise == True):
+            self.isNoise = False
+        else:
+            self.isNoise= True
 
         self.showImage()
     def changeRotateValue(self):
@@ -104,13 +280,13 @@ class MainWindow:
 
 
     def scaleImage(self, value):
-        self.new_image = cv2.resize(self.new_image, None, fx=value+1, fy=value+1, interpolation=cv2.INTER_CUBIC)
+
         self.showImage()
     def sharpenImageEvt(self):
         print('')
     def Tich_chap(self, mask):
         self.new_image = cv2.cvtColor(self.image, cv2.COLOR_RGB2GRAY)
-        print('cscscscsxs', self.image)
+
         m, n, c = self.new_image.shape
         img_new = np.zeros([m, n])
         for i in range(1, m - 1):
@@ -128,98 +304,30 @@ class MainWindow:
                 img_new[i, j] = temp
         img_new = img_new.astype(np.uint8)
         return img_new
-    def checkBox_edgeDetectionEvt(self):
-        # roberts_cross_v = np.array([[1, 0],
-        #                             [0, -1]])
-        #
-        # roberts_cross_h = np.array([[0, 1],
-        #                             [-1, 0]])
-        # self.new_image = self.new_image.astype('float64')
-        # self.new_image /= 255.0
-        # vertical = ndimage.convolve(self.new_image, roberts_cross_v)
-        # horizontal = ndimage.convolve(self.new_image, roberts_cross_h)
-        #
-        # self.new_image = np.sqrt(np.square(horizontal) + np.square(vertical))
-        # self.new_image *= 255
-        # # print(self.new_image)
-        # self.showImage()
-        # Định nghĩa Sobel theo hướng X
-
-        # locSobelX = np.array(([-1, -2, -1],
-        #                       [0, 0, 0],
-        #                       [1, 2, 1]), dtype="float")
-        #
-        # # Định nghĩa bộ lọc Sobel theo hướng Y
-        # locSobelY = np.array(([-1, 0, 1],
-        #                       [-2, 0, 2],
-        #                       [1, 0, 1]), dtype="float")
-        # imgSobelX = self.Tich_chap(self.new_image, locSobelX)
-        #
-        # imgSobelY = self.Tich_chap(self.new_image, locSobelY)
-        #
-        # imgSobelXY = imgSobelX + imgSobelY
-        #
-        # self.new_image = imgSobelXY
-        # self.showImage()
-        # self.new_image = cv2.Canny(self.new_image, cv2.CV_64F, dx=0, dy=1, ksize=5)
-        # cv2.imshow("ddđ", self.new_image)
-        # self.showImage()
-        # locSobelX = np.array(([-1, -2, -1],
-        #                       [0, 0, 0],
-        #                       [1, 2, 1]), dtype="float")
-
-        # Định nghĩa bộ lọc Sobel theo hướng Y
-        # locSobelY = np.array(([-1, 0, 1],
-        #                       [-2, 0, 2],
-        #                       [1, 0, 1]), dtype="float")
-        # locGaussian3x3 = np.array(([0.0751 / 4.8976, 0.1238 / 4.8976, 0.0751 / 4.8976],
-        #                            [0.1238 / 4.8976, 0.2042 / 4.8976, 0.1238 / 4.8976],
-        #                            [0.0751 / 4.8976, 0.1238 / 4.8976, 0.0751 / 4.8976]), dtype="float")
-        # image = self.Tich_chap(locGaussian3x3)
-        #
-        # imgSobelX = self.Tich_chap(locSobelX)
-        #
-        # imgSobelY = self.Tich_chap(locSobelY)
-        #
-        # imgSobelXY = imgSobelX + imgSobelY
-        #
-        # self.new_image = image + imgSobelXY
-        # cv2.imshow('ddd', self.new_image)
-        gray = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2GRAY)
-        img_gaussian = cv2.GaussianBlur(gray, (3, 3), 0)
-
-        # sobel
-        img_sobelx = cv2.Sobel(img_gaussian, cv2.CV_8U, 1, 0, ksize=3)
-        img_sobely = cv2.Sobel(img_gaussian, cv2.CV_8U, 0, 1, ksize=3)
-
-        img_sobel = (img_sobelx + img_sobely) / 2
-        for i in range(img_sobel.shape[0]):
-            for j in range(img_sobel.shape[1]):
-                if img_sobel[i][j] < 20:
-                    img_sobel[i][j] = 0
-                else:
-                    img_sobel[i][j] = 255
-        self.new_image = img_sobel
-        fig = plt.figure(figsize=(16, 9))  # Tạo vùng vẽ tỷ lệ 16:9
-        ax1= fig.subplots(1, 1)  # Tạo 6 vùng vẽ con
-        ax1.imshow(self.new_image, cmap='gray')
-        ax1.set_title("Ảnh gốc")
-        plt.show()
-        # cv2.imshow('dddd', self.new_image)
-        self.showImage()
     def grayImageEvt(self):
+<<<<<<< HEAD
         if self.isGray == True :
+=======
+        if(self.isGray == True):
+>>>>>>> an
             self.isGray = False
         else:
             self.isGray = True
 
         self.showImage()
     def invertImageEvt(self):
+<<<<<<< HEAD
         if self.isInvert == True:
             self.isInvert = False
         else:
             self.isInvert = True
 
+=======
+        if(self.isInvert == True):
+            self.isInvert = False
+        else:
+            self.isInvert = True
+>>>>>>> an
         self.showImage()
     def changeThretholdValue(self, value):
         self.thresholdValue = value
@@ -232,6 +340,23 @@ class MainWindow:
         #     value += 1
         self.new_image = cv2.threshold(self.new_image, self.thresholdValue, 255, cv2.THRESH_BINARY)
         self.new_image = self.new_image[1]
+<<<<<<< HEAD
+=======
+    def openGaussianForm(self):
+        # self.changegaussianBlurValue = value
+
+        # self.editvalueWindow = MainWindow()
+        # self.ui = Ui_Form()
+        # self.ui.setupUi(self.editvalueWindow)
+        # self.editvalueWindow.show()
+
+        self.openEdtForm(1)
+    def openEdtForm(self, type):
+        self.edt_window = QtWidgets.QMainWindow()
+
+        self.ui = Ui_Form(self, type)
+        self.ui.setupUi(self.edt_window)
+>>>>>>> an
 
     def changeblurMode(self, text):
         if(self.uic.rd_btn_medium.isChecked()):
@@ -239,7 +364,7 @@ class MainWindow:
         elif(self.uic.rd_btn_gaussian.isChecked()):
             blur.mode = 1
             blur.mode = 1
-        print(blur.mode)
+
     def convertImagetoDisplay(self, image):
         if(len(image.shape) == 2):
             h, w = self.new_image.shape
@@ -252,18 +377,50 @@ class MainWindow:
         return image
     def show(self):
         self.main_win.show()
+    def changeHueValue(self, value):
+        self.hueValue = value
+
+        self.showImage()
     def changeBrightnessValue(self, value):
         self.brightValue = value
 
         self.showImage()
-    def updateBrighness(self):
+    def changeSaturationValue(self, value):
+        self.saturationValue = value
+        
+        self.showImage()
+    def updateHSVSpace(self, type):
         hsv = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2HSV)
-        # print(self.new_image)
+
         h, s, v = cv2.split(hsv)
-        # distance = abs(value-self.brightValue)
-        lim = 255 - self.brightValue
-        v[v > lim] = 255
-        v[v <= lim] += self.brightValue
+
+        if(type == 1):
+            distance = abs(180 - self.hueValue)
+
+            if (self.hueValue < 180):
+                h[h > h - distance] -= distance
+                h[h <= h - distance] = 0
+            elif(self.hueValue > 180):
+                h[h < h + distance] += distance
+                h[h >= h + distance] = 179
+        elif(type == 2):
+            distance = abs(50 - self.saturationValue)
+
+            if (self.saturationValue < 50):
+                s[s > s - distance] -= distance
+                s[s <= s - distance] = 0
+            else:
+                s[s < s + distance] += distance
+                s[s >= s + distance] = 255
+        elif(type == 3):
+            distance = abs(50 - self.brightValue)
+
+            if (self.brightValue < 50):
+                v[v > v - distance] -= distance
+                v[v <= v - distance] = 0
+            else:
+                v[v < v + distance] += distance
+                v[v >= v + distance] = 255
         final_hsv = cv2.merge((h, s, v))
         self.new_image = cv2.cvtColor(final_hsv, cv2.COLOR_HSV2BGR)
         # print("H",h,"S :", s, "V:", v)
@@ -298,21 +455,31 @@ class MainWindow:
         f = QFileDialog.getOpenFileName(None, 'Open a file', '',
                                            'Image Files (*.png *.jpg *.bmp *.tif)')
         if f[0] != '':
+<<<<<<< HEAD
             self.image = cv2.imread(f[0])
 
             print('so chieu', len(self.image.shape))
             print('imageeeeeeeee', self.image)
-            self.new_image =  self.image
+=======
 
-            self.brightValue = 0
+            self.image = cv2.imread(f[0])
+            # print('so chieu', len(self.image.shape))
+            # print('imageeeeeeeee', self.image)
+>>>>>>> an
+            self.new_image =  self.image
+            self.tmp_image = self.image
+
             self.uic.slider_brighness.setValue(self.brightValue)
 
-            self.selectedImage = True
+            self.initial_variable()
+
+            self.resetComponentValue()
             self.showImage()
     def showImage(self):
         self.updateChange()
 
         self.uic.lbl_photo.setPixmap(QtGui.QPixmap.fromImage(self.convertImagetoDisplay(self.image)))
+<<<<<<< HEAD
         # self.uic.lbl_newPhoto.setPixmap(QtGui.QPixmap.fromImage(self.convertImagetoDisplay(self.new_image)))
 
         qformat = QImage.Format_Indexed8
@@ -327,17 +494,38 @@ class MainWindow:
 
         self.uic.lbl_newPhoto.setPixmap(QPixmap.fromImage(new_image))
         self.uic.lbl_newPhoto.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+=======
+
+        qformat = QImage.Format_Indexed8
+
+        if len(self.new_image.shape) == 3:
+            if (self.new_image.shape[2]) == 4:
+                qformat = QImage.Format_RGBA8888
+            else:
+                qformat = QImage.Format_RGB888
+        img = QImage(self.new_image, self.new_image.shape[1], self.new_image.shape[0], self.new_image.strides[0], qformat).rgbSwapped()
+
+        self.uic.lbl_newPhoto.setPixmap(QPixmap.fromImage(img))
+        self.uic.lbl_newPhoto.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+
+>>>>>>> an
         self.updateHistogram()
     def updateChange(self):
-        self.new_image = self.image
+        self.new_image = self.tmp_image
+        self.image = self.tmp_image
 
         #update brighness
-        if(self.brightValue != 0):
-            self.updateBrighness()
+        if (self.hueValue != 50):
+            self.updateHSVSpace(1)
+        if(self.saturationValue != 50):
+            self.updateHSVSpace(2)
+        if(self.brightValue != 50):
+            self.updateHSVSpace(3)
         if(self.thresholdValue != 0):
             self.updateThrehold()
         if(self.rotateValue >= 0):
             image_module.rotateImage(self)
+<<<<<<< HEAD
         if(self.gaussianValue > 0):
             new_value = self.gaussianValue
             if self.gaussianValue % 2 == 0:
@@ -347,14 +535,56 @@ class MainWindow:
             self.image = cv2.resize(np.uint8(self.image), None, fx=30, fy=30, interpolation=cv2.INTER_CUBIC)
             print(image_module.zoomValue)
 
+=======
+        #gaussian blur
+
+        self.new_image = filter_module.gaussian_blur(self.new_image, self.gaussianBlurValue)
+        #box blur
+        self.new_image = filter_module.box_blur(self.new_image, self.boxBlurValue)
+        #median blur
+        self.new_image = filter_module.median_blur(self.new_image, self.medianBlurValue)
+        #average blur
+        self.new_image = filter_module.average_blur(self.new_image, self.averageBlurValue)
+>>>>>>> an
         if(self.isHistogram_Equal == True):
             self.histogramEqual()
         if(self.isGray == True):
             self.new_image = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2GRAY)
+<<<<<<< HEAD
         if(self.isInvert == True):
             self.new_image = 255 - self.new_image
         if(self.isShearing == True):
             self.new_image = image_module.shearingImage(self.new_image)
+=======
+
+        if(self.isInvert == True):
+            self.new_image = 255 - self.new_image
+        if(self.isNoise == True):
+            self.new_image = filter_module.add_noise(self.new_image)
+            self.isNoise = False
+        if(self.isGamma == True):
+            gamma = 1.0
+            gamma = gamma * 0.1
+            invGamma = 1.0 / gamma
+            table = np.array([((i / 255.0) ** invGamma) * 255
+                              for i in np.arange(0, 256)]).astype("uint8")
+
+            self.new_image = cv2.LUT(self.new_image, table)
+        #zoom
+        self.new_image = cv2.resize(self.new_image, None, fx=self.zoomValue, fy=self.zoomValue, interpolation=cv2.INTER_CUBIC)
+        self.image = cv2.resize(self.image, None, fx=self.zoomValue, fy=self.zoomValue, interpolation=cv2.INTER_CUBIC)
+        if(self.isShearing == True):
+            self.new_image = image_module.shearing(self.new_image)
+        #sobel
+        self.new_image = filter_module.sobel_filter(self.new_image, self.isSobelHDetection, self.isSobelVDetection)
+        self.new_image = filter_module.sobel_sharpen(self.new_image, self.isSobelSharpen)
+        # laplace
+        self.new_image = filter_module.laplace_sharpen(self.new_image, self.isLaplaceSharpen)
+        #roberts
+        self.new_image = filter_module.roberts_filter(self.new_image, self.isRobertsED)
+    #simple laplace edge detection
+        self.new_image = filter_module.laplace_filter(self.new_image, self.isEDLaplace)
+>>>>>>> an
     def updateHistogram(self):
         # random data
         # data = [random.random() for i in range(10)]
