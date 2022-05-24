@@ -5,6 +5,7 @@ from modules.filter_module import BlurFunction
 
 class Ui_Form(object):
 <<<<<<< HEAD
+<<<<<<< HEAD
     title = ''
     spinBox = None
 
@@ -21,6 +22,13 @@ class Ui_Form(object):
     def __init__(self, main, type):
         self.type = type
         self.main = main
+=======
+    type
+    # spinBox = None
+    def __init__(self, main, type):
+        self.type = type
+        self.main = main
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
     def setupUi(self, Form):
         self.tmp_gaussianBlurValue = self.main.gaussianBlurValue
 
@@ -33,9 +41,12 @@ class Ui_Form(object):
         self.spinBox.setGeometry(QtCore.QRect(30, 11, 51, 41))
         self.spinBox.setObjectName("spinBox")
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.spinBox.setProperty('value', self.main.gaussianValue)
 =======
 >>>>>>> an
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
 
         self.horizontalSlider = QtWidgets.QSlider(Form)
         self.horizontalSlider.setGeometry(QtCore.QRect(30, 70, 211, 22))
@@ -43,10 +54,14 @@ class Ui_Form(object):
         self.horizontalSlider.setObjectName("horizontalSlider")
         self.horizontalSlider.valueChanged['int'].connect(self.changeValue)
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.horizontalSlider.setValue(self.main.gaussianValue)
 =======
 
 >>>>>>> an
+=======
+
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
         self.btn_ok = QtWidgets.QPushButton(Form)
         self.btn_ok.setGeometry(QtCore.QRect(270, 10, 93, 28))
         self.btn_ok.setObjectName("pushButton")
@@ -57,10 +72,15 @@ class Ui_Form(object):
         self.btn_cancel.clicked.connect(self.cancelBtnEvt)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         self.updateSpinBoxandSliderValue()
 
 >>>>>>> an
+=======
+        self.updateSpinBoxandSliderValue()
+
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
         self.label = QtWidgets.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(100, 20, 55, 16))
         font = QtGui.QFont()
@@ -101,11 +121,14 @@ class Ui_Form(object):
     def changeValue(self, value):
         if(self.type == 1):
 <<<<<<< HEAD
+<<<<<<< HEAD
             self.main.gaussianValue = value
         elif(self.type == 2):
             self.main.gaussianValue = value
         self.spinBox.setProperty('value', self.main.gaussianValue)
 =======
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
             self.main.gaussianBlurValue = value
         elif(self.type == 2):
             self.main.boxBlurValue = value
@@ -120,7 +143,10 @@ class Ui_Form(object):
             self.main.gamma += 1
 
         self.spinBox.setProperty('value', value)
+<<<<<<< HEAD
 >>>>>>> an
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
         self.main.showImage()
     def btnOkEvt(self):
         self.Form.close()

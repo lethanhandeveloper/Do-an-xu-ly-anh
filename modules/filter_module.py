@@ -1,5 +1,6 @@
 import cv2
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 class BlurFunction():
     gaussianValue = 0
@@ -18,6 +19,8 @@ class BlurFunction():
 
 
 =======
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
 from numpy import random
 import numpy as np
 
@@ -132,5 +135,9 @@ def laplace_sharpen(img, isLaplaceSharpen):
     if(isLaplaceSharpen == True):
         return img - laplace_filter(img, True)
 
+<<<<<<< HEAD
     return img
 >>>>>>> an
+=======
+    return img
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809

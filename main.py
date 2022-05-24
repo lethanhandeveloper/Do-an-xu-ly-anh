@@ -3,9 +3,13 @@ import sys, cv2
 from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtGui import QImage, QPixmap
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
 >>>>>>> an
+=======
+from PyQt5.QtPrintSupport import QPrinter, QPrintDialog
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import matplotlib.pyplot as plt
@@ -14,9 +18,12 @@ import numpy as np
 import blur
 from modules import image_module
 <<<<<<< HEAD
+<<<<<<< HEAD
 from modules import filter_module
 =======
 >>>>>>> an
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
 from editvalueform import Ui_Form
 
 from giaodien import Ui_MainWindow
@@ -29,6 +36,7 @@ class MainWindow:
     selectedImage = False
     rotateValue = 0
 <<<<<<< HEAD
+<<<<<<< HEAD
     isHistogram_Equal = False
     isGray = False
     isInvert = False
@@ -38,6 +46,8 @@ class MainWindow:
     gaussianValue = 0
 
 =======
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
 
     isHistogram_Equal = False
 
@@ -66,7 +76,10 @@ class MainWindow:
     isGamma = False
     isShearing = False
     isNoise = False
+<<<<<<< HEAD
 >>>>>>> an
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
     def __init__(self):
         self.main_win = QMainWindow()
         self.uic = Ui_MainWindow()
@@ -79,8 +92,11 @@ class MainWindow:
         self.uic.slider_threshold.valueChanged['int'].connect(self.changeThretholdValue)
         self.uic.actionOpen.triggered.connect(self.openImageEvt)
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.uic.actionGaussian.triggered.connect(self.gaussianFormEvt)
 =======
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
         self.uic.actionPrint.triggered.connect(self.printImage)
         self.uic.actionGaussian.triggered.connect(self.openGaussianForm)
 >>>>>>> an
@@ -306,10 +322,14 @@ class MainWindow:
         return img_new
     def grayImageEvt(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
         if self.isGray == True :
 =======
         if(self.isGray == True):
 >>>>>>> an
+=======
+        if(self.isGray == True):
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
             self.isGray = False
         else:
             self.isGray = True
@@ -317,17 +337,23 @@ class MainWindow:
         self.showImage()
     def invertImageEvt(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
         if self.isInvert == True:
             self.isInvert = False
         else:
             self.isInvert = True
 
 =======
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
         if(self.isInvert == True):
             self.isInvert = False
         else:
             self.isInvert = True
+<<<<<<< HEAD
 >>>>>>> an
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
         self.showImage()
     def changeThretholdValue(self, value):
         self.thresholdValue = value
@@ -341,7 +367,10 @@ class MainWindow:
         self.new_image = cv2.threshold(self.new_image, self.thresholdValue, 255, cv2.THRESH_BINARY)
         self.new_image = self.new_image[1]
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
     def openGaussianForm(self):
         # self.changegaussianBlurValue = value
 
@@ -356,7 +385,10 @@ class MainWindow:
 
         self.ui = Ui_Form(self, type)
         self.ui.setupUi(self.edt_window)
+<<<<<<< HEAD
 >>>>>>> an
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
 
     def changeblurMode(self, text):
         if(self.uic.rd_btn_medium.isChecked()):
@@ -456,16 +488,22 @@ class MainWindow:
                                            'Image Files (*.png *.jpg *.bmp *.tif)')
         if f[0] != '':
 <<<<<<< HEAD
+<<<<<<< HEAD
             self.image = cv2.imread(f[0])
 
             print('so chieu', len(self.image.shape))
             print('imageeeeeeeee', self.image)
 =======
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
 
             self.image = cv2.imread(f[0])
             # print('so chieu', len(self.image.shape))
             # print('imageeeeeeeee', self.image)
+<<<<<<< HEAD
 >>>>>>> an
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
             self.new_image =  self.image
             self.tmp_image = self.image
 
@@ -479,6 +517,7 @@ class MainWindow:
         self.updateChange()
 
         self.uic.lbl_photo.setPixmap(QtGui.QPixmap.fromImage(self.convertImagetoDisplay(self.image)))
+<<<<<<< HEAD
 <<<<<<< HEAD
         # self.uic.lbl_newPhoto.setPixmap(QtGui.QPixmap.fromImage(self.convertImagetoDisplay(self.new_image)))
 
@@ -495,6 +534,8 @@ class MainWindow:
         self.uic.lbl_newPhoto.setPixmap(QPixmap.fromImage(new_image))
         self.uic.lbl_newPhoto.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 =======
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
 
         qformat = QImage.Format_Indexed8
 
@@ -508,7 +549,10 @@ class MainWindow:
         self.uic.lbl_newPhoto.setPixmap(QPixmap.fromImage(img))
         self.uic.lbl_newPhoto.setAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
 
+<<<<<<< HEAD
 >>>>>>> an
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
         self.updateHistogram()
     def updateChange(self):
         self.new_image = self.tmp_image
@@ -526,6 +570,7 @@ class MainWindow:
         if(self.rotateValue >= 0):
             image_module.rotateImage(self)
 <<<<<<< HEAD
+<<<<<<< HEAD
         if(self.gaussianValue > 0):
             new_value = self.gaussianValue
             if self.gaussianValue % 2 == 0:
@@ -536,6 +581,8 @@ class MainWindow:
             print(image_module.zoomValue)
 
 =======
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
         #gaussian blur
 
         self.new_image = filter_module.gaussian_blur(self.new_image, self.gaussianBlurValue)
@@ -545,17 +592,23 @@ class MainWindow:
         self.new_image = filter_module.median_blur(self.new_image, self.medianBlurValue)
         #average blur
         self.new_image = filter_module.average_blur(self.new_image, self.averageBlurValue)
+<<<<<<< HEAD
 >>>>>>> an
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
         if(self.isHistogram_Equal == True):
             self.histogramEqual()
         if(self.isGray == True):
             self.new_image = cv2.cvtColor(self.new_image, cv2.COLOR_BGR2GRAY)
+<<<<<<< HEAD
 <<<<<<< HEAD
         if(self.isInvert == True):
             self.new_image = 255 - self.new_image
         if(self.isShearing == True):
             self.new_image = image_module.shearingImage(self.new_image)
 =======
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
 
         if(self.isInvert == True):
             self.new_image = 255 - self.new_image
@@ -584,7 +637,10 @@ class MainWindow:
         self.new_image = filter_module.roberts_filter(self.new_image, self.isRobertsED)
     #simple laplace edge detection
         self.new_image = filter_module.laplace_filter(self.new_image, self.isEDLaplace)
+<<<<<<< HEAD
 >>>>>>> an
+=======
+>>>>>>> f15a33363e03c1e2f0e4999a76aaa245a268c809
     def updateHistogram(self):
         # random data
         # data = [random.random() for i in range(10)]
