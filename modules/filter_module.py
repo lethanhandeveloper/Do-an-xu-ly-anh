@@ -48,6 +48,11 @@ def box_blur(img, value):
         img = cv2.boxFilter(img, -1, (value, value))
     return img
 
+def average_blur(img, value):
+    if (value > 0):
+        value = convertValidValue(value)
+        img = cv2.blur(img, (value, value))
+    return img
 def median_blur(img, value):
     if (value > 0):
         value = convertValidValue(value)
@@ -73,12 +78,27 @@ def sobel_filter(img, horizontal, vertical):
         return cv2.filter2D(img, ddepth=-1, kernel=Hkernel)
     elif(vertical == True):
         return cv2.filter2D(img, ddepth=-1, kernel=Vkernel)
+
+    return img
+def roberts_filter(img, isRobertsED):
+    Vkernel = np.array([[0, 0, 0],
+                        [0, -1, 0],
+                        [0, 0, 1]])
+
+    Hkernel = np.array([[0, 0, 0],
+                        [0, 0, -1],
+                        [0, 1, 0]])
+    if (isRobertsED == True):
+        img1 = cv2.filter2D(img, ddepth=-1, kernel=Vkernel)
+        img2 = cv2.filter2D(img, ddepth=-1, kernel=Hkernel)
+        print("ROBERT FILLLLLLLLTER")
+        return img1 + img2
+
     return img
 def sobel_sharpen(img, isSobelSharpen):
     if(isSobelSharpen == True):
         return img - sobel_filter(img, True, True)
     return img
-
 def laplace_filter(img, isEDLaplace):
     kernel = np.array([[0, 1, 0],
                         [1, -4, 1],

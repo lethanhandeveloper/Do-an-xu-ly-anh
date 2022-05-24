@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1491</width>
+    <width>1465</width>
     <height>887</height>
    </rect>
   </property>
@@ -100,7 +100,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>410</y>
+      <y>430</y>
       <width>321</width>
       <height>22</height>
      </rect>
@@ -122,7 +122,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>370</y>
+      <y>410</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -139,7 +139,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>220</y>
+      <y>280</y>
       <width>111</width>
       <height>20</height>
      </rect>
@@ -173,7 +173,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>430</y>
+      <y>460</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -190,7 +190,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>460</y>
+      <y>480</y>
       <width>321</width>
       <height>22</height>
      </rect>
@@ -203,7 +203,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1360</x>
-      <y>220</y>
+      <y>280</y>
       <width>91</width>
       <height>20</height>
      </rect>
@@ -226,7 +226,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>340</y>
+      <y>380</y>
       <width>321</width>
       <height>22</height>
      </rect>
@@ -266,7 +266,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>320</y>
+      <y>360</y>
       <width>71</width>
       <height>16</height>
      </rect>
@@ -347,8 +347,8 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>747</y>
-      <width>341</width>
+      <y>750</y>
+      <width>321</width>
       <height>41</height>
      </rect>
     </property>
@@ -368,7 +368,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>280</y>
+      <y>340</y>
       <width>321</width>
       <height>22</height>
      </rect>
@@ -399,7 +399,7 @@ background-color:white
     <property name="geometry">
      <rect>
       <x>1120</x>
-      <y>260</y>
+      <y>310</y>
       <width>55</width>
       <height>16</height>
      </rect>
@@ -409,6 +409,166 @@ background-color:white
     </property>
     <property name="text">
      <string>Hue</string>
+    </property>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>1120</x>
+      <y>570</y>
+      <width>321</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="Blur">
+     <attribute name="title">
+      <string>Blur</string>
+     </attribute>
+     <widget class="QSpinBox" name="spinBox">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>0</y>
+        <width>51</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="singleStep">
+       <number>2</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_10">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>-1</y>
+        <width>55</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>SIZE</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_3">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>301</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Box</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>301</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Median</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>301</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Gaussian</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Sharpen">
+     <attribute name="title">
+      <string>Sharpen</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Edge Detection</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Segmentation</string>
+     </attribute>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>1120</x>
+      <y>520</y>
+      <width>321</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:white</string>
+    </property>
+    <property name="text">
+     <string>                  Properties</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>1150</x>
+      <y>220</y>
+      <width>101</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:white</string>
+    </property>
+    <property name="text">
+     <string>Equalize</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>1300</x>
+      <y>220</y>
+      <width>101</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:white</string>
+    </property>
+    <property name="text">
+     <string>Clear</string>
     </property>
    </widget>
    <zorder>label_7</zorder>
@@ -430,13 +590,17 @@ background-color:white
    <zorder>btn_reset</zorder>
    <zorder>slider_hue</zorder>
    <zorder>label_2</zorder>
+   <zorder>tabWidget</zorder>
+   <zorder>label_9</zorder>
+   <zorder>pushButton</zorder>
+   <zorder>pushButton_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1491</width>
+     <width>1465</width>
      <height>26</height>
     </rect>
    </property>
@@ -479,6 +643,7 @@ background-color:white
      <addaction name="actionBox"/>
      <addaction name="actionMedian"/>
      <addaction name="actionGaussian"/>
+     <addaction name="actionAverage"/>
     </widget>
     <widget class="QMenu" name="menuNoise">
      <property name="title">
@@ -730,6 +895,11 @@ background-color:white
   <action name="actionLaplaceSharpen">
    <property name="text">
     <string>Laplace</string>
+   </property>
+  </action>
+  <action name="actionAverage">
+   <property name="text">
+    <string>Average</string>
    </property>
   </action>
  </widget>

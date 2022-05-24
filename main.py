@@ -31,20 +31,22 @@ class MainWindow:
     gaussianBlurValue = 0
     boxBlurValue = 0
     medianBlurValue = 0
-
+    averageBlurValue = 0
     #sharpen
     isSobelSharpen = False
     isLaplaceSharpen = False
+
     #edgedetection
     isSobelHDetection = False
     isSobelVDetection = False
+    isRobertsED = False
     #laplace edge detection
     isEDLaplace = False
     #image
     hueValue = 180
     brightValue = 50
     saturationValue = 50
-    c = gamma = 1
+    isGamma = False
     isShearing = False
     isNoise = False
     def __init__(self):
@@ -75,7 +77,8 @@ class MainWindow:
         self.uic.histogramWidget.addWidget(self.canvas)
         self.uic.actionBox.triggered.connect(self.openBoxFilterForm)
         self.uic.actionLog.triggered.connect(self.turnLogarit)
-        
+
+        self.uic.actionAverage.triggered.connect(self.openAverageBlueForm)
         self.uic.actionMedian.triggered.connect(self.openMedianFilterForm)
         self.uic.btn_reset.clicked.connect(self.reset)
         #zoom
@@ -92,6 +95,26 @@ class MainWindow:
         self.uic.actionEDVerticalSobel.triggered.connect(self.verticalSobelEdgeDetection)
         #laplace edge dectection
         self.uic.actionEDLaplace_2.triggered.connect(self.laplaceEdgeDetection)
+
+        self.uic.actionGamma.triggered.connect(self.changeGammaValue)
+        #roberts edge detection
+        self.uic.actionRoberts.triggered.connect(self.robertsEdgeDetection)
+    def openAverageBlueForm(self, value):
+        self.openEdtForm(5)
+    def changeGammaValue(self):
+        if (self.isGamma == False):
+            self.isGamma = True
+        else:
+            self.isGamma = False
+
+        self.showImage()
+    def robertsEdgeDetection(self):
+        if (self.isRobertsED == True):
+            self.isRobertsED = False
+        else:
+            self.isRobertsED = True
+
+        self.showImage()
     def laplaceSharpen(self):
         if(self.isLaplaceSharpen == True):
             self.isLaplaceSharpen = False
@@ -107,7 +130,10 @@ class MainWindow:
 
         self.showImage()
     def sobelSharpen(self):
-        self.isSobelSharpen = True
+        if (self.isSobelSharpen == True):
+            self.isSobelSharpen = False
+        else:
+            self.isSobelSharpen = True
 
         self.showImage()
     def horizontalSobelEdgeDetection(self):
@@ -171,6 +197,7 @@ class MainWindow:
 
         self.isHistogram_Equal = False
 
+        self.isShearing = False
         self.isGray = False
         self.isInvert = False
 
@@ -178,6 +205,7 @@ class MainWindow:
         self.gaussianBlurValue = 0
         self.boxBlurValue = 0
         self.medianBlurValue = 0
+        self.averageBlurValue = 0
         # image
         self.brightValue = 50
         self.saturationValue = 50
@@ -188,6 +216,9 @@ class MainWindow:
         self.isSobelHDetection = False
         self.isSobelVDetection = False
         print('isgrayyyyyy', self.isGray)
+        #sharpen
+        self.isSobelSharpen = False
+        self.isLaplaceSharpen = False
         # self.showImage()
     def openMedianFilterForm(self):
         self.openEdtForm(3)
@@ -441,10 +472,8 @@ class MainWindow:
         self.new_image = filter_module.box_blur(self.new_image, self.boxBlurValue)
         #median blur
         self.new_image = filter_module.median_blur(self.new_image, self.medianBlurValue)
-
-        #sharpen
-        self.new_image = filter_module.laplace_sharpen(self.new_image, self.isLaplaceSharpen)
-
+        #average blur
+        self.new_image = filter_module.average_blur(self.new_image, self.averageBlurValue)
         if(self.isHistogram_Equal == True):
             self.histogramEqual()
         if(self.isGray == True):
@@ -455,22 +484,26 @@ class MainWindow:
         if(self.isNoise == True):
             self.new_image = filter_module.add_noise(self.new_image)
             self.isNoise = False
-        if(self.c > 1 or self.gamma > 1):
-            gamma = 1.5
+        if(self.isGamma == True):
+            gamma = 1.0
+            gamma = gamma * 0.1
             invGamma = 1.0 / gamma
             table = np.array([((i / 255.0) ** invGamma) * 255
                               for i in np.arange(0, 256)]).astype("uint8")
 
-            self.image = cv2.LUT(self.new_image, table)
-            self.displayImage(2)
+            self.new_image = cv2.LUT(self.new_image, table)
         #zoom
         self.new_image = cv2.resize(self.new_image, None, fx=self.zoomValue, fy=self.zoomValue, interpolation=cv2.INTER_CUBIC)
         self.image = cv2.resize(self.image, None, fx=self.zoomValue, fy=self.zoomValue, interpolation=cv2.INTER_CUBIC)
         if(self.isShearing == True):
             self.new_image = image_module.shearing(self.new_image)
-        #edge detection
+        #sobel
         self.new_image = filter_module.sobel_filter(self.new_image, self.isSobelHDetection, self.isSobelVDetection)
         self.new_image = filter_module.sobel_sharpen(self.new_image, self.isSobelSharpen)
+        # laplace
+        self.new_image = filter_module.laplace_sharpen(self.new_image, self.isLaplaceSharpen)
+        #roberts
+        self.new_image = filter_module.roberts_filter(self.new_image, self.isRobertsED)
     #simple laplace edge detection
         self.new_image = filter_module.laplace_filter(self.new_image, self.isEDLaplace)
     def updateHistogram(self):

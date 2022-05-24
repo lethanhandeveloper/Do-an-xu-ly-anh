@@ -87,6 +87,10 @@ class Ui_Form(object):
             self.main.boxBlurValue = value
         elif(self.type == 3):
             self.main.medianBlurValue = value
+        elif(self.type == 4):
+            self.main.changeGammaValue = value
+        elif(self.type == 5):
+            self.main.averageBlurValue = value
         elif(self.type == 10):
             self.main.c += 1
             self.main.gamma += 1
